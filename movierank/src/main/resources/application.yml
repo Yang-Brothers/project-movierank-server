@@ -1,0 +1,66 @@
+spring:
+  profiles:
+    active: mariadb
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1;DB_CLOSE_ON_EXIT=FALSE
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+  batch:
+    jdbc:
+      initialize-schema: embedded
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        #show_sql: true
+        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+#  org.hibernate.type: trace
+---
+spring:
+  config:
+    activate:
+      on-profile: mariadb
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mariadb://localhost:3306/movierank?characterEncoding=UTF-8&serverTimezone=UTC
+      username: yhw
+      password: 1234
+      driver-class-name: org.mariadb.jdbc.Driver
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: true
+#      names: ${job.name:NONE}
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        #show_sql: true
+        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+#  org.hibernate.type: trace
+---
+
