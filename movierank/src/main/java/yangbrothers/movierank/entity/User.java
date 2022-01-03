@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import yangbrothers.movierank.dto.SignUpDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +25,9 @@ public class User {
     private String username;
 
     private String password;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    List<BookMark> bookMarkList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
