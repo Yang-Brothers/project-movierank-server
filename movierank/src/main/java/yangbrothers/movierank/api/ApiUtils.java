@@ -1,6 +1,5 @@
 package yangbrothers.movierank.api;
 
-import yangbrothers.movierank.dto.TokenDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
 
 public class ApiUtils {
