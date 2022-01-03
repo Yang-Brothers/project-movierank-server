@@ -2,6 +2,7 @@ package yangbrothers.movierank.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.or.kobis.kobisopenapi.consumer.rest.KobisOpenAPIRestService;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,27 +12,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
+@Slf4j
 public class MovieApiService {
 
     private String key;
-    private String curPage;
     private String itemPerPage;
 
-    public MovieApiService(String key, String curPage, String itemPerPage) {
+    public MovieApiService(String key, String itemPerPage) {
         this.key = key;
-        this.curPage = curPage;
         this.itemPerPage = itemPerPage;
     }
 
-    public List<Movie> movieList() {
+    public List<Movie> movieList(String curPage) {
         ArrayList<Movie> result = new ArrayList<>();
 
         try {
+            long startTime = System.currentTimeMillis();
             KobisOpenAPIRestService kobisOpenAPIRestService = new KobisOpenAPIRestService(key);
 
             JSONParser jsonParser = new JSONParser();
-            JSONObject obj = (JSONObject) jsonParser.parse(kobisOpenAPIRestService.getMovieList(true, curPage, itemPerPage,
-                    null, null, null, null, null, null, null, null));
+            String movieList1 = kobisOpenAPIRestService.getMovieList(true, curPage, itemPerPage,
+                    null, null, null, null, null, null, null, null);
+
+            long endTime = System.currentTimeMillis();
+            log.info("Thread: {}, runningTime: {}", Thread.currentThread().getName(), endTime - startTime);
+
+            JSONObject obj = (JSONObject) jsonParser.parse(movieList1);
+
 
             JSONObject movieListResult = (JSONObject) obj.get("movieListResult");
             JSONArray movieList = (JSONArray) movieListResult.get("movieList");
@@ -56,8 +63,6 @@ public class MovieApiService {
         } catch (Exception e) {
             e.getMessage();
         }
-
-
 
         return result;
     }

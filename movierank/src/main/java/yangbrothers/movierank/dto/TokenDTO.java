@@ -10,4 +10,3 @@ public class TokenDTO extends CommonResult {
 
     private String token;
 }
-
