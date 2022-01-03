@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import yangbrothers.movierank.dto.UserDTO;
+import yangbrothers.movierank.dto.SignUpDTO;
 
 import javax.persistence.*;
 
@@ -27,9 +27,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(UserDTO userDTO, PasswordEncoder passwordEncoder) {
-        this.username = userDTO.getUsername();
-        this.password = passwordEncoder.encode(userDTO.getPassword());
+    public User(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder) {
+        this.username = signUpDTO.getUsername();
+        this.password = passwordEncoder.encode(signUpDTO.getPassword());
         this.role = Role.USER;
     }
 }

@@ -51,8 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/api/authenticate").permitAll()
-                .mvcMatchers("/api/signup").permitAll()
+                .mvcMatchers("/api/authentication/login", "/api/authentication/error/entrypoint").permitAll()
+                .mvcMatchers("/api/authentication/signup").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

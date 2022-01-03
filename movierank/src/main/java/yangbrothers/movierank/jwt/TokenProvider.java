@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class TokenProvider implements InitializingBean {
+public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
@@ -34,7 +35,7 @@ public class TokenProvider implements InitializingBean {
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
 
-    @Override
+    @PostConstruct
     public void afterPropertiesSet() throws Exception {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
