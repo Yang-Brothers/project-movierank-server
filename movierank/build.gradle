@@ -38,6 +38,10 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+	// kobis
+	implementation files('libs/kobis-opcl-rest-v1.0.jar')
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 test {

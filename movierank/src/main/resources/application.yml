@@ -35,6 +35,8 @@ jwt:
   header: Authorization
   secret: ${secret.key}
   token-validity-in-seconds: 86400
+api:
+  secret: ${api.key}
 ---
 spring:
   config:
