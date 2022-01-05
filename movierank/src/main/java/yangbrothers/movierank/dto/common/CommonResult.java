@@ -7,4 +7,5 @@ public class CommonResult {
     private String result;
     private String code;
     private String msg;
+    private String username;
 }

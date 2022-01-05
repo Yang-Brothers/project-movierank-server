@@ -14,7 +14,6 @@ import yangbrothers.movierank.repo.UserRepo;
 public class UserService implements UserDetailsService {
 
     private final UserRepo userRepo;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
