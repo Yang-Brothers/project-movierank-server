@@ -43,6 +43,7 @@ public class JobConfig {
     private final CustomStepListener stepExecutionListener;
     private final CustomItemWriter customItemWriter;
     private final EntityManager entityManager;
+    private final MovieApiService movieApiService;
 
     @Value("${api.key}")
     private String key;
@@ -83,11 +84,10 @@ public class JobConfig {
             @Value("#{stepExecutionContext['firstIndex']}") int firstIndex,
             @Value("#{stepExecutionContext['lastIndex']}") int lastIndex) {
         ArrayList<Movie> list = new ArrayList<>();
-        MovieApiService movieApiService = new MovieApiService(key, "100");
 
         for (int i = firstPage; i <= lastPage; i++) {
             long startTime = System.currentTimeMillis();
-            List<Movie> movies = movieApiService.movieList(String.valueOf(i));
+            List<Movie> movies = movieApiService.movieList(String.valueOf(i), null);
             long endTime = System.currentTimeMillis();
             log.info("Thread: {}, runningTime: {}", Thread.currentThread().getName(), endTime - startTime);
             list.addAll(movies);
