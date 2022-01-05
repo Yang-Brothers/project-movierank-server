@@ -37,4 +37,10 @@ public class User {
         this.password = passwordEncoder.encode(signUpDTO.getPassword());
         this.role = Role.USER;
     }
+
+    public User(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder, Role admin) {
+        this.username = signUpDTO.getUsername();
+        this.password = passwordEncoder.encode(signUpDTO.getPassword());
+        this.role = admin;
+    }
 }

@@ -43,10 +43,18 @@ dependencies {
 	implementation files('libs/kobis-opcl-rest-v1.0.jar')
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
-	//batch
+	// batch
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	testImplementation 'org.springframework.batch:spring-batch-test'
 	implementation 'org.springframework.batch:spring-batch-integration'
+
+	// monitoring
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	// Quartz
+	implementation 'org.quartz-scheduler:quartz'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 }
 
 test {

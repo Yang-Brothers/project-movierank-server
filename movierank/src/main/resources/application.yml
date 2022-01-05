@@ -25,22 +25,29 @@ spring:
         order_inserts: true
         jdbc.batch_size: 1000
         default_batch_fetch_size: 1000
-        #show_sql: true
-        format_sql: true
+#        show_sql: true
+#        format_sql: true
   batch:
     jdbc:
       initialize-schema: embedded
+    job:
+      enabled: false
 
-logging.level:
-  org.hibernate.SQL: debug
+#logging.level:
+#  org.hibernate.SQL: debug
 #  org.hibernate.type: trace
 
 jwt:
   header: Authorization
-  secret: ${secret.key}
+  secret: ${jwt.key}
   token-validity-in-seconds: 86400
 api:
   secret: ${api.key}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ---
 spring:
   config:

@@ -1,6 +1,8 @@
 package yangbrothers.movierank.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.context.ShutdownEndpoint;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        web.ignoring().mvcMatchers("/h2-console/**", "/favicon.ico");
     }
 
     @Override
@@ -51,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/api/authentication/login", "/api/authentication/error/entrypoint", "/test").permitAll()
-                .mvcMatchers("/api/authentication/signup").permitAll()
+                .mvcMatchers("/api/authentication/login", "/api/authentication/error/entrypoint", "/api/authentication/signup", "/test", "/h2-console/*").permitAll()
+                .mvcMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

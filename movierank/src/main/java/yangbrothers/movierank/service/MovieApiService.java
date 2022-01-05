@@ -27,16 +27,11 @@ public class MovieApiService {
         ArrayList<Movie> result = new ArrayList<>();
 
         try {
-            long startTime = System.currentTimeMillis();
             KobisOpenAPIRestService kobisOpenAPIRestService = new KobisOpenAPIRestService(key);
 
             JSONParser jsonParser = new JSONParser();
             String movieList1 = kobisOpenAPIRestService.getMovieList(true, curPage, itemPerPage,
                     null, null, null, null, null, null, null, null);
-
-            long endTime = System.currentTimeMillis();
-            log.info("Thread: {}, runningTime: {}", Thread.currentThread().getName(), endTime - startTime);
-
             JSONObject obj = (JSONObject) jsonParser.parse(movieList1);
 
 
