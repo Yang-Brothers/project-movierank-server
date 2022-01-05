@@ -8,18 +8,26 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.partition.support.Partitioner;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStreamWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import yangbrothers.movierank.entity.Movie;
+import yangbrothers.movierank.job.CustomItemWriter;
+import yangbrothers.movierank.job.CustomStepListener;
 import yangbrothers.movierank.service.MovieApiService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +40,9 @@ public class JobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final Partitioner partitioner;
-    private final ItemStreamWriter itemStreamWriter;
+    private final CustomStepListener stepExecutionListener;
+    private final CustomItemWriter customItemWriter;
+    private final EntityManager entityManager;
 
     @Value("${api.key}")
     private String key;
@@ -40,6 +50,7 @@ public class JobConfig {
     @Bean
     public Job job() {
         return jobBuilderFactory.get("job")
+                .incrementer(new RunIdIncrementer())
                 .start(masterStep())
                 .build();
     }
@@ -55,21 +66,12 @@ public class JobConfig {
     }
 
     @Bean
-    public TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor threadPoolExecutor = new ThreadPoolTaskExecutor();
-        threadPoolExecutor.setCorePoolSize(1);
-        threadPoolExecutor.setMaxPoolSize(1);
-        threadPoolExecutor.setThreadNamePrefix("yhw-movieRank-");
-
-        return threadPoolExecutor;
-    }
-
-    @Bean
     public Step slaveStep() {
         return stepBuilderFactory.get("slaveStep")
-                .<Movie, Movie>chunk(100)
-                .reader(itemReader(0, 0))
-                .writer(itemStreamWriter)
+                .<Movie, Movie>chunk(500)
+                .reader(itemReader(0, 0, 0, 0))
+                .writer(customItemWriter)
+                .listener(stepExecutionListener)
                 .build();
     }
 
@@ -77,18 +79,47 @@ public class JobConfig {
     @StepScope
     public ItemReader<? extends Movie> itemReader(
             @Value("#{stepExecutionContext['firstPage']}") int firstPage,
-            @Value("#{stepExecutionContext['lastPage']}") int lastPage) {
+            @Value("#{stepExecutionContext['lastPage']}") int lastPage,
+            @Value("#{stepExecutionContext['firstIndex']}") int firstIndex,
+            @Value("#{stepExecutionContext['lastIndex']}") int lastIndex) {
         ArrayList<Movie> list = new ArrayList<>();
         MovieApiService movieApiService = new MovieApiService(key, "100");
 
         for (int i = firstPage; i <= lastPage; i++) {
-            List<Movie> movies = movieApiService.movieList(String.valueOf(i));
             long startTime = System.currentTimeMillis();
-            list.addAll(movies);
+            List<Movie> movies = movieApiService.movieList(String.valueOf(i));
             long endTime = System.currentTimeMillis();
             log.info("Thread: {}, runningTime: {}", Thread.currentThread().getName(), endTime - startTime);
+            list.addAll(movies);
         }
 
+        indexing(firstIndex, list);
+        deleteQuery(firstIndex, lastIndex);
+
         return new ListItemReader<>(list);
+    }
+
+    private void indexing(int firstIndex, ArrayList<Movie> list) {
+        int i = firstIndex + 1;
+        for (Movie movie : list) {
+            movie.setIndex(i++);
+        }
+    }
+
+    private void deleteQuery(int firstIndex, int lastIndex) {
+        Query query = entityManager.createQuery("DELETE FROM Movie m where m.index > :firstIndex and m.index < :lastIndex");
+        int deleteCount = query.setParameter("firstIndex", firstIndex).setParameter("lastIndex", lastIndex).executeUpdate();
+        log.info("deleteCount: {}", deleteCount);
+    }
+
+    @Bean(name = "myTaskExecutor")
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor threadPoolExecutor = new ThreadPoolTaskExecutor();
+        threadPoolExecutor.setCorePoolSize(1);
+        threadPoolExecutor.setMaxPoolSize(1);
+        threadPoolExecutor.setQueueCapacity(100);
+        threadPoolExecutor.setThreadNamePrefix("yhw-movieRank-");
+
+        return threadPoolExecutor;
     }
 }

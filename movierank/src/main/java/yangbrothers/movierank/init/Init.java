@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import yangbrothers.movierank.dto.SignUpDTO;
+import yangbrothers.movierank.entity.Role;
 import yangbrothers.movierank.entity.User;
 import yangbrothers.movierank.repo.UserRepo;
 
@@ -19,7 +20,7 @@ public class Init {
     @PostConstruct
     public void init() {
         SignUpDTO signUpDTO = new SignUpDTO("yhw", "123", "123");
-        User user = new User(signUpDTO, passwordEncoder);
+        User user = new User(signUpDTO, passwordEncoder, Role.ADMIN);
 
         userRepo.save(user);
     }

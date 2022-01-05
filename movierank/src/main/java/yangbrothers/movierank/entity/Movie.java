@@ -29,8 +29,13 @@ public class Movie {
     private String repNationNm;
     private String repGenreNm;
     private String directors;
+    private int index;
 
     public void setDirectors(String directors) {
         this.directors = directors;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
