@@ -2,7 +2,6 @@ package yangbrothers.movierank.repo.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import yangbrothers.movierank.dto.BookMarkApiDTO;
 import yangbrothers.movierank.dto.PageRequestDTO;
 import yangbrothers.movierank.dto.QBookMarkApiDTO_BookMarkDTO;
@@ -20,7 +19,6 @@ public class BookMarkRepoImpl implements BookMarkRepoCustom {
 
     @Override
     public List<BookMarkApiDTO.BookMarkDTO> bookMarkList(Long userId, PageRequestDTO pageRequestDTO) {
-        Pageable pageable = pageRequestDTO.getPageable();
 
         List<BookMarkApiDTO.BookMarkDTO> bookMarkDTOList = jpaQueryFactory
                 .select(new QBookMarkApiDTO_BookMarkDTO(
@@ -38,8 +36,8 @@ public class BookMarkRepoImpl implements BookMarkRepoCustom {
                 .from(bookMark)
                 .leftJoin(bookMark.user, user)
                 .where(user.userId.eq(userId))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageRequestDTO.getStart())
+                .limit(pageRequestDTO.getLen())
                 .fetch();
 
         return bookMarkDTOList;

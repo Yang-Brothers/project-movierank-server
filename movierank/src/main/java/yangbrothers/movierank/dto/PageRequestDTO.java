@@ -1,16 +1,18 @@
 package yangbrothers.movierank.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PageRequestDTO {
-    int page = 0;
-    int size = 10;
-    private String movieNm = "";
+    @ApiModelProperty(value = "시작", required = true)
+    private int start = 0;
 
-    public Pageable getPageable() {
-        return PageRequest.of(page, size);
-    }
+    @ApiModelProperty(value = "크기", required = true)
+    private int len = 10;
+
+    @ApiModelProperty(value = "영화 검색 이름")
+    private String movieNm = "";
 }

@@ -10,16 +10,12 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.partition.support.Partitioner;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemStreamWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import yangbrothers.movierank.entity.Movie;
 import yangbrothers.movierank.job.CustomItemWriter;
@@ -45,7 +41,7 @@ public class JobConfig {
     private final EntityManager entityManager;
     private final MovieApiService movieApiService;
 
-    @Value("${api.key}")
+    @Value("${api.secret}")
     private String key;
 
     @Bean
@@ -79,15 +75,15 @@ public class JobConfig {
     @Bean
     @StepScope
     public ItemReader<? extends Movie> itemReader(
-            @Value("#{stepExecutionContext['firstPage']}") int firstPage,
-            @Value("#{stepExecutionContext['lastPage']}") int lastPage,
-            @Value("#{stepExecutionContext['firstIndex']}") int firstIndex,
-            @Value("#{stepExecutionContext['lastIndex']}") int lastIndex) {
+            @Value("#{stepExecutionContext['firstPage']}") long firstPage,
+            @Value("#{stepExecutionContext['lastPage']}") long lastPage,
+            @Value("#{stepExecutionContext['firstIndex']}") long firstIndex,
+            @Value("#{stepExecutionContext['lastIndex']}") long lastIndex) {
         ArrayList<Movie> list = new ArrayList<>();
 
-        for (int i = firstPage; i <= lastPage; i++) {
+        for (long i = firstPage; i <= lastPage; i++) {
             long startTime = System.currentTimeMillis();
-            List<Movie> movies = movieApiService.movieList(String.valueOf(i), null);
+            List<Movie> movies = movieApiService.movieList(String.valueOf(i), null, "100");
             long endTime = System.currentTimeMillis();
             log.info("Thread: {}, runningTime: {}", Thread.currentThread().getName(), endTime - startTime);
             list.addAll(movies);
@@ -99,15 +95,15 @@ public class JobConfig {
         return new ListItemReader<>(list);
     }
 
-    private void indexing(int firstIndex, ArrayList<Movie> list) {
-        int i = firstIndex + 1;
+    private void indexing(long firstIndex, ArrayList<Movie> list) {
+        long i = firstIndex + 1;
         for (Movie movie : list) {
-            movie.setIndex(i++);
+            movie.setId(i++);
         }
     }
 
-    private void deleteQuery(int firstIndex, int lastIndex) {
-        Query query = entityManager.createQuery("DELETE FROM Movie m where m.index > :firstIndex and m.index < :lastIndex");
+    private void deleteQuery(long firstIndex, long lastIndex) {
+        Query query = entityManager.createQuery("DELETE FROM Movie m where m.id > :firstIndex and m.id < :lastIndex");
         int deleteCount = query.setParameter("firstIndex", firstIndex).setParameter("lastIndex", lastIndex).executeUpdate();
         log.info("deleteCount: {}", deleteCount);
     }

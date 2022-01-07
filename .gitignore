@@ -24,3 +24,4 @@ hs_err_pid*
 *.jar
 *.properties
 .DS_Store
+movierank/src/main/java/yangbrothers/movierank/init/Init.java

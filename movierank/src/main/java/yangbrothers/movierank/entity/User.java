@@ -14,11 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@SequenceGenerator(
+        name = "USER_SEQ_GENERATOR",
+        sequenceName = "USER_SEQ",
+        allocationSize = 1
+)
 public class User {
 
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ_GENERATOR")
     private Long userId;
 
     @Column(unique = true)

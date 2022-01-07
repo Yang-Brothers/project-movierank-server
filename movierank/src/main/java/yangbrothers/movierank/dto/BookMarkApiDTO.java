@@ -9,8 +9,7 @@ import java.util.List;
 @Data
 public class BookMarkApiDTO extends CommonResult {
 
-    private int page;
-    private List<BookMarkDTO> bookMarkDTOList;
+    private List<Object> data;
 
     @Data
     public static class BookMarkDTO {

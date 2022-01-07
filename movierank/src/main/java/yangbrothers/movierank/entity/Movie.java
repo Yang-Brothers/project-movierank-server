@@ -3,6 +3,7 @@ package yangbrothers.movierank.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 
@@ -10,10 +11,9 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Movie {
+public class Movie extends BaseTimeEntity implements Persistable<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "movie_id")
     private Long id;
 
@@ -29,13 +29,17 @@ public class Movie {
     private String repNationNm;
     private String repGenreNm;
     private String directors;
-    private int index;
 
     public void setDirectors(String directors) {
         this.directors = directors;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean isNew() {
+        return createdDate == null;
     }
 }

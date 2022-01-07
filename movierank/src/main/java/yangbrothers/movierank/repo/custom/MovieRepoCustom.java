@@ -8,4 +8,6 @@ import java.util.List;
 public interface MovieRepoCustom {
 
     List<MovieApiDTO.MovieDTO> movieList(PageRequestDTO pageRequestDTO);
+
+    List<MovieApiDTO.MovieDTO> movieSearch(PageRequestDTO pageRequestDTO);
 }

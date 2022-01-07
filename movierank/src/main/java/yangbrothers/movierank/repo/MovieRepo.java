@@ -9,5 +9,4 @@ import java.util.Optional;
 
 public interface MovieRepo extends JpaRepository<Movie, Long>, MovieRepoCustom {
 
-    public Optional<Movie> findMovieByIndex(int index);
 }

@@ -13,6 +13,11 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendRedirect("/api/authentication/error/entrypoint");
+        String requestURI = request.getRequestURI();
+        if (request.equals("/api/authentication/login")) {
+            response.sendRedirect("/api/authentication/error/loginfail");
+        } else {
+            response.sendRedirect("/api/authentication/error/unauthenticated");
+        }
     }
 }

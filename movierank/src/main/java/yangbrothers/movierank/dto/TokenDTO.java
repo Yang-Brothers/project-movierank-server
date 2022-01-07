@@ -8,5 +8,6 @@ import yangbrothers.movierank.dto.common.CommonResult;
 @AllArgsConstructor
 public class TokenDTO extends CommonResult {
 
+    private String username;
     private String token;
 }
