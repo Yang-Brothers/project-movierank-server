@@ -4,12 +4,13 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import yangbrothers.movierank.dto.common.CommonResult;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
 public class BookMarkApiDTO extends CommonResult {
 
-    private List<Object> data;
+    private HashMap<String, Object> data = new HashMap<>();
 
     @Data
     public static class BookMarkDTO {

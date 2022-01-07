@@ -7,12 +7,13 @@ import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.entity.Movie;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Data
 public class MovieApiDTO extends CommonResult {
 
-    private List<Object> data = new ArrayList<>();
+    private HashMap<String, Object> data = new HashMap<>();
 
     @Data
     public static class MovieDTO {

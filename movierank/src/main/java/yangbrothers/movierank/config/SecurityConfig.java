@@ -26,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenProvider tokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final String[] whiteList = new String[]{"/api/authentication/login", "/api/authentication/error/entrypoint",
-            "/api/authentication/signup", "/test", "/h2-console/**", "/api/movie/**"};
+    private final String[] whiteList = new String[]{"/api/authentication/login", "/api/authentication/error/loginfail",
+            "/api/authentication/error/unauthenticated", "/api/authentication/signup", "/test", "/h2-console/**", "/api/movie/**"};
 
     @Override
     public void configure(WebSecurity web) throws Exception {

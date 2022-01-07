@@ -37,7 +37,7 @@ public class BookMarkService {
 
         List<BookMarkApiDTO.BookMarkDTO> bookMarkList = bookMarkRepo.bookMarkList(user.getUserId(), pageRequestDTO);
         BookMarkApiDTO bookMarkApiDTO = new BookMarkApiDTO();
-        bookMarkApiDTO.getData().add(bookMarkApiDTO);
+        bookMarkApiDTO.getData().put("bookMarkList", bookMarkApiDTO);
         ApiUtils.makeSuccessResult(bookMarkApiDTO, ApiUtils.SUCCESS_OK);
 
         return bookMarkApiDTO;

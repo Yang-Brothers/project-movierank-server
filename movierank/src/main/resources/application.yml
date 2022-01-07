@@ -31,7 +31,7 @@ spring:
       enabled: false
 
 logging.level:
-  org.hibernate.SQL: debug
+#  org.hibernate.SQL: debug
 #  org.hibernate.type: trace
   io.swagger.models.parameters.AbstractSerializableParameter: error
 

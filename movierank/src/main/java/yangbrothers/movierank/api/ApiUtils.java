@@ -10,6 +10,7 @@ public class ApiUtils {
 
     public static final String SUCCESS_OK = "200";
     public static final String SUCCESS_CREATED = "201";
+    public static final String SUCCESS_NO_CONTENT = "204";
 
 
     public static final String FAIL_BAD_REQUEST = "400";
@@ -27,6 +28,13 @@ public class ApiUtils {
         errorResult.setResult(FAIL);
         errorResult.setMsg(msg);
         errorResult.setCode(code);
+    }
+
+    public static CommonResult getSuccessResult(String code) {
+        CommonResult successResult = new CommonResult();
+        makeSuccessResult(successResult, code);
+
+        return successResult;
     }
 
     public static CommonResult getFailResult(String msg, String code) {

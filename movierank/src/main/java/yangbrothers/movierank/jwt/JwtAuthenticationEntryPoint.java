@@ -14,7 +14,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String requestURI = request.getRequestURI();
-        if (request.equals("/api/authentication/login")) {
+
+        if (requestURI.equals("/api/authentication/login")) {
             response.sendRedirect("/api/authentication/error/loginfail");
         } else {
             response.sendRedirect("/api/authentication/error/unauthenticated");
