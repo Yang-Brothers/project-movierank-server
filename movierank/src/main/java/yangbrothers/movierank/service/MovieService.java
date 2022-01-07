@@ -34,7 +34,7 @@ public class MovieService {
 
     private MovieApiDTO getMovieApiDTO(List<MovieApiDTO.MovieDTO> movieList) {
         MovieApiDTO movieApiDTO = new MovieApiDTO();
-        movieApiDTO.getData().add(movieList);
+        movieApiDTO.getData().put("movieList", movieList);
         ApiUtils.makeSuccessResult(movieApiDTO, ApiUtils.SUCCESS_OK);
         return movieApiDTO;
     }
