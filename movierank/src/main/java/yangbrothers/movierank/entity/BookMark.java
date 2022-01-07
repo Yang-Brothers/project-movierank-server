@@ -11,10 +11,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@SequenceGenerator(
+        name = "BOOKMARK_SEQ_GENERATOR",
+        sequenceName = "BOOKMARK_SEQ",
+        allocationSize = 1
+)
 public class BookMark {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOOKMARK_SEQ_GENERATOR")
     @Column(name = "bookmark_id")
     private Long id;
 

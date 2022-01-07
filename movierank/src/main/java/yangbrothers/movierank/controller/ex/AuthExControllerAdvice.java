@@ -18,17 +18,15 @@ public class AuthExControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult loginExHandle(LoginEx ex) {
-        CommonResult errorResult = getErrorResult(ex.getMessage(), ApiUtils.LOGIN_FAIL);
 
-        return errorResult;
+        return ApiUtils.getFailResult(ex.getMessage(), ApiUtils.FAIL_BAD_REQUEST);
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public CommonResult authExHandle(AuthenticationEx ex) {
-        CommonResult errorResult = getErrorResult(ex.getMessage(), ApiUtils.AUTHORIZATION_FAIL);
 
-        return errorResult;
+        return ApiUtils.getFailResult(ex.getMessage(), ApiUtils.FAIL_UNAUTHORIZED);
     }
 
     @ExceptionHandler
@@ -36,27 +34,18 @@ public class AuthExControllerAdvice {
     public CommonResult signUpExHandle(SignUpEx ex) {
         if (ex.getSignUpDTO() != null) {
             SignUpDTO signUpDTO = ex.getSignUpDTO();
-            ApiUtils.makeFailResult(signUpDTO, ex.getMessage(), ApiUtils.SIGNUP_FAIL);
+            ApiUtils.makeFailResult(signUpDTO, ex.getMessage(), ApiUtils.FAIL_BAD_REQUEST);
 
             return signUpDTO;
         } else {
-            CommonResult errorResult = getErrorResult(ex.getMessage(), ApiUtils.SIGNUP_FAIL);
-
-            return errorResult;
+            return ApiUtils.getFailResult(ex.getMessage(), ApiUtils.FAIL_BAD_REQUEST);
         }
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult usernameNotFoundExHandle(UsernameNotFoundException ex) {
-        CommonResult errorResult = getErrorResult(ex.getMessage(), ApiUtils.USER_NOT_FOUND);
 
-        return errorResult;
-    }
-
-    private CommonResult getErrorResult(String message, String errorCode) {
-        CommonResult errorResult = new CommonResult();
-        ApiUtils.makeFailResult(errorResult, message, errorCode);
-        return errorResult;
+        return ApiUtils.getFailResult(ex.getMessage(), ApiUtils.FAIL_BAD_REQUEST);
     }
 }

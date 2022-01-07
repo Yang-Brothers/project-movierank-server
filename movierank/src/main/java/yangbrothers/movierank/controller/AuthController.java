@@ -1,8 +1,8 @@
 package yangbrothers.movierank.controller;
 
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import yangbrothers.movierank.api.ApiUtils;
 import yangbrothers.movierank.dto.LoginDTO;
@@ -33,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/authentication")
 @RequiredArgsConstructor
+@Api(tags = {"회원가입, 로그인, 인증 오류를 제공하는 Controller"})
 public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
@@ -41,12 +41,14 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MessageSource messageSource;
 
-    @GetMapping("/error/entrypoint")
-    public void errorEntryPoint() {
-        throw new AuthenticationEx("아이디 또는 비밀번호가 일치하지 않습니다.");
-    }
 
     @PostMapping("/signup")
+    @ApiImplicitParam(name = "signUpDTO", required = true, dataTypeClass = SignUpDTO.class, paramType = "body")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "회원 가입 성공"),
+            @ApiResponse(code = 400, message = "회원 가입 실패")
+    })
+    @ApiOperation(value = "회원가입을 진행하는 메소드")
     public ResponseEntity<SignUpDTO> signup(@Valid @RequestBody SignUpDTO signUpDTO, BindingResult bindingResult) {
         List<String> fields = signUpDTO.getFields();
 
@@ -65,11 +67,17 @@ public class AuthController {
         }
 
         User user = new User(signUpDTO, passwordEncoder);
-        ApiUtils.makeSuccessResult(signUpDTO, ApiUtils.SIGNUP_SUCCESS);
+        ApiUtils.makeSuccessResult(signUpDTO, ApiUtils.SUCCESS_CREATED);
         return new ResponseEntity<>(signUpDTO, HttpStatus.OK);
     }
 
     @PostMapping("/login")
+    @ApiImplicitParam(name = "loginDTO", required = true, dataTypeClass = LoginDTO.class, paramType = "body")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "로그인 성공"),
+            @ApiResponse(code = 400, message = "로그인 실패")
+    })
+    @ApiOperation(value = "로그인을 진행하는 메소드")
     public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
         List<String> fields = loginDTO.getFields();
 
@@ -85,8 +93,8 @@ public class AuthController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        TokenDTO tokenDTO = new TokenDTO(jwt);
-        ApiUtils.makeSuccessResult(tokenDTO, ApiUtils.AUTHORIZATION_SUCCESS);
+        TokenDTO tokenDTO = new TokenDTO(jwt, loginDTO.getUsername());
+        ApiUtils.makeSuccessResult(tokenDTO, ApiUtils.SUCCESS_CREATED);
 
         return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.OK);
     }

@@ -1,12 +1,16 @@
 package yangbrothers.movierank.config;
 
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import yangbrothers.movierank.Quartz.BatchScheduledJob;
 
 @Configuration
 public class QuartzConfig {
+
+    @Value("${quartz.time}")
+    private String time;
 
     @Bean
     public JobDetail jobDetail() {
@@ -21,6 +25,6 @@ public class QuartzConfig {
         return TriggerBuilder.newTrigger()
                 .withIdentity("Trigger")
                 .forJob(jobDetail())
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?")).build();
+                .withSchedule(CronScheduleBuilder.cronSchedule(time)).build();
     }
 }

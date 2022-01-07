@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: dev
     group:
       "local": "local, common"
       "dev": "dev, common"
@@ -15,10 +15,9 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
     properties:
       hibernate:
         order_updates: true
@@ -28,21 +27,25 @@ spring:
 #        show_sql: true
 #        format_sql: true
   batch:
-    jdbc:
-      initialize-schema: embedded
     job:
       enabled: false
 
-#logging.level:
-#  org.hibernate.SQL: debug
+logging.level:
+  org.hibernate.SQL: debug
 #  org.hibernate.type: trace
+  io.swagger.models.parameters.AbstractSerializableParameter: error
 
 jwt:
   header: Authorization
   secret: ${jwt.key}
   token-validity-in-seconds: 86400
+
 api:
   secret: ${api.key}
+
+quartz:
+  config: ${quartz.time}
+
 management:
   endpoints:
     web:
@@ -56,23 +59,31 @@ spring:
   h2:
     console:
       enabled: true
-
   datasource:
     hikari:
       jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1;DB_CLOSE_ON_EXIT=FALSE
       username: sa
       password:
       driver-class-name: org.h2.Driver
+  batch:
+    jdbc:
+      initialize-schema: embedded
 ---
 spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
   config:
     activate:
-      on-profile: mariadb
+      on-profile: dev
   datasource:
     hikari:
-      jdbc-url: jdbc:mariadb://localhost:3306/movierank?characterEncoding=UTF-8&serverTimezone=UTC
+      jdbc-url: jdbc:mariadb://localhost:3306/movierank?characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
       username: yhw
       password: 1234
       driver-class-name: org.mariadb.jdbc.Driver
+  batch:
+    jdbc:
+      initialize-schema: always
 ---
-

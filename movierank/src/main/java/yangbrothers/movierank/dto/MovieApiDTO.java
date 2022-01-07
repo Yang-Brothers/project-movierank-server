@@ -6,13 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.entity.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class MovieApiDTO extends CommonResult {
 
-    private int page;
-    private List<MovieDTO> movieDTOList;
+    private List<Object> data = new ArrayList<>();
 
     @Data
     public static class MovieDTO {

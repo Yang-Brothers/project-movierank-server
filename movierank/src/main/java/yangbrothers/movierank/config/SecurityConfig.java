@@ -22,13 +22,18 @@ import yangbrothers.movierank.jwt.*;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final TokenProvider tokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final String[] whiteList = new String[]{"/api/authentication/login", "/api/authentication/error/entrypoint",
+            "/api/authentication/signup", "/test", "/h2-console/**", "/api/movie/**"};
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        web.ignoring().mvcMatchers("/swagger-resources/**", "/swagger-ui/**", "/v2/api-docs", "webjars/**",
+                "/actuator/**", "/favicon.ico");
     }
 
     @Override
@@ -52,8 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/api/authentication/login", "/api/authentication/error/entrypoint", "/api/authentication/signup", "/test", "/h2-console/*").permitAll()
-                .mvcMatchers("/actuator/**").permitAll()
+                .mvcMatchers(whiteList).permitAll()
                 .anyRequest().authenticated()
 
                 .and()

@@ -21,9 +21,7 @@ public class MovieApiService {
     @Value("${api.key}")
     private String key;
 
-    private String itemPerPage = "10";
-
-    public List<Movie> movieList(String curPage, String movieNm) {
+    public List<Movie> movieList(String curPage, String movieNm, String itemPerPage) {
         ArrayList<Movie> result = new ArrayList<>();
 
         try {
