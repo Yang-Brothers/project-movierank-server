@@ -3,7 +3,7 @@ package yangbrothers.movierank.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import yangbrothers.movierank.api.ApiUtils;
+import yangbrothers.movierank.util.ApiUtil;
 import yangbrothers.movierank.dto.BookMarkApiDTO;
 import yangbrothers.movierank.dto.PageRequestDTO;
 import yangbrothers.movierank.entity.BookMark;
@@ -37,8 +37,8 @@ public class BookMarkService {
 
         List<BookMarkApiDTO.BookMarkDTO> bookMarkList = bookMarkRepo.bookMarkList(user.getUserId(), pageRequestDTO);
         BookMarkApiDTO bookMarkApiDTO = new BookMarkApiDTO();
-        bookMarkApiDTO.getData().put("bookMarkList", bookMarkApiDTO);
-        ApiUtils.makeSuccessResult(bookMarkApiDTO, ApiUtils.SUCCESS_OK);
+        bookMarkApiDTO.getData().put("bookMarkList", bookMarkList);
+        ApiUtil.makeSuccessResult(bookMarkApiDTO, ApiUtil.SUCCESS_OK);
 
         return bookMarkApiDTO;
     }

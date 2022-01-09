@@ -2,6 +2,7 @@ package yangbrothers.movierank.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import yangbrothers.movierank.dto.common.CommonResult;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class BookMarkApiDTO extends CommonResult {
     private HashMap<String, Object> data = new HashMap<>();
 
     @Data
+    @NoArgsConstructor
     public static class BookMarkDTO {
         private String movieCd;
         private String movieNm;
