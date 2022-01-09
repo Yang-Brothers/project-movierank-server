@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
@@ -29,21 +28,14 @@ public class TokenProvider {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String AUTHORITIES_KEY = "auth";
-    private final String secret;
     private final long tokenValidityInMilliseconds;
     private final StringRedisTemplate redisTemplate;
-
-    private Key key;
+    private final Key key;
 
     @Autowired
     public TokenProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds, StringRedisTemplate redisTemplate) {
-        this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
         this.redisTemplate = redisTemplate;
-    }
-
-    @PostConstruct
-    public void afterPropertiesSet() throws Exception {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }

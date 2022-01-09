@@ -1,9 +1,8 @@
-package yangbrothers.movierank.api;
+package yangbrothers.movierank.util;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import yangbrothers.movierank.dto.common.CommonResult;
 
-public class ApiUtils {
+public class ApiUtil {
 
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";
@@ -20,7 +19,7 @@ public class ApiUtils {
 
 
     public static void makeSuccessResult(CommonResult successResult, String code) {
-        successResult.setResult(ApiUtils.SUCCESS);
+        successResult.setResult(ApiUtil.SUCCESS);
         successResult.setCode(code);
     }
 

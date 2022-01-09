@@ -4,36 +4,28 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import yangbrothers.movierank.api.ApiUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import yangbrothers.movierank.dto.LoginDTO;
 import yangbrothers.movierank.dto.SignUpDTO;
 import yangbrothers.movierank.dto.SignUpResponseDTO;
 import yangbrothers.movierank.dto.TokenDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
-import yangbrothers.movierank.entity.User;
-import yangbrothers.movierank.ex.AuthenticationEx;
 import yangbrothers.movierank.ex.LoginEx;
 import yangbrothers.movierank.ex.SignUpEx;
 import yangbrothers.movierank.jwt.JwtFilter;
-import yangbrothers.movierank.jwt.TokenProvider;
-import yangbrothers.movierank.repo.UserRepo;
+import yangbrothers.movierank.service.AuthService;
+import yangbrothers.movierank.util.ApiUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/authentication")
@@ -41,13 +33,8 @@ import java.util.concurrent.TimeUnit;
 @Api(tags = {"회원가입, 로그인, 인증 오류를 제공하는 Controller"})
 public class AuthController {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepo userRepo;
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthService authService;
     private final MessageSource messageSource;
-    private final StringRedisTemplate redisTemplate;
-
 
     @PostMapping("/signup")
     @ApiImplicitParam(name = "signUpDTO", required = true, dataTypeClass = SignUpDTO.class, paramType = "body")
@@ -66,19 +53,7 @@ public class AuthController {
             }
         }
 
-        if (userRepo.findUserByUsername(signUpDTO.getUsername()).orElse(null) != null) {
-            throw new SignUpEx("이미 존재하는 아이디입니다.");
-        }
-        if (!signUpDTO.getPassword().equals(signUpDTO.getPasswordConfirm())) {
-            throw new SignUpEx("비밀번호가 일치하지 않습니다.", signUpDTO);
-        }
-
-        userRepo.save(new User(signUpDTO, passwordEncoder));
-
-        SignUpResponseDTO signUpResponseDTO = new SignUpResponseDTO(signUpDTO.getUsername());
-
-        ApiUtils.makeSuccessResult(signUpResponseDTO, ApiUtils.SUCCESS_CREATED);
-        return new ResponseEntity<>(signUpResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(authService.signUp(signUpDTO), HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -88,7 +63,8 @@ public class AuthController {
             @ApiResponse(code = 400, message = "로그인 실패")
     })
     @ApiOperation(value = "로그인을 진행하는 메소드")
-    public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
+
         List<String> fields = loginDTO.getFields();
 
         for (String field : fields) {
@@ -98,27 +74,22 @@ public class AuthController {
             }
         }
 
-        Authentication authentication = getAuthentication(loginDTO);
-        String jwt = tokenProvider.createToken(authentication);
+        String jwt = authService.login(loginDTO);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         TokenDTO tokenDTO = new TokenDTO(loginDTO.getUsername(), jwt);
-        ApiUtils.makeSuccessResult(tokenDTO, ApiUtils.SUCCESS_CREATED);
+        ApiUtil.makeSuccessResult(tokenDTO, ApiUtil.SUCCESS_CREATED);
 
-        return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.CREATED);
     }
 
     @PostMapping("/logout")
     @ApiResponse(code = 200, message = "로그아웃 성공")
     @ApiOperation(value = "로그아웃을 진행하는 메소드")
     public ResponseEntity<CommonResult> logout(HttpServletRequest request) {
-        String token = tokenProvider.resolveToken(request);
-        Date expirationDate = tokenProvider.getExpirationDate(token);
-        redisTemplate.opsForValue().set(token, "logout", expirationDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-        CommonResult successResult = ApiUtils.getSuccessResult(ApiUtils.SUCCESS_OK);
 
-        return new ResponseEntity<>(successResult, HttpStatus.OK);
+        return new ResponseEntity<>(authService.logout(request), HttpStatus.OK);
     }
 
     private String checkFiledError(BindingResult bindingResult, String field, Object[] args) {
@@ -134,13 +105,5 @@ public class AuthController {
             }
         }
         return null;
-    }
-
-    private Authentication getAuthentication(LoginDTO loginDTO) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return authentication;
     }
 }

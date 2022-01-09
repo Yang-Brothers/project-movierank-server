@@ -21,7 +21,6 @@ public class MovieController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "start", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "len", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "movieNm", required = false, dataType = "String", paramType = "query")
     })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "영화 조회 성공")
@@ -52,6 +51,4 @@ public class MovieController {
 
         return movieService.movieSearch(pageRequestDTO);
     }
-
-
 }

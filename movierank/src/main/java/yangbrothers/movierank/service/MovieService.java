@@ -2,7 +2,7 @@ package yangbrothers.movierank.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import yangbrothers.movierank.api.ApiUtils;
+import yangbrothers.movierank.util.ApiUtil;
 import yangbrothers.movierank.dto.MovieApiDTO;
 import yangbrothers.movierank.dto.PageRequestDTO;
 import yangbrothers.movierank.ex.MovieNmNotFoundEx;
@@ -35,7 +35,7 @@ public class MovieService {
     private MovieApiDTO getMovieApiDTO(List<MovieApiDTO.MovieDTO> movieList) {
         MovieApiDTO movieApiDTO = new MovieApiDTO();
         movieApiDTO.getData().put("movieList", movieList);
-        ApiUtils.makeSuccessResult(movieApiDTO, ApiUtils.SUCCESS_OK);
+        ApiUtil.makeSuccessResult(movieApiDTO, ApiUtil.SUCCESS_OK);
         return movieApiDTO;
     }
 }
