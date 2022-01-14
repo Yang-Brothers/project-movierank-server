@@ -22,6 +22,7 @@ public class BookMarkRepoImpl implements BookMarkRepoCustom {
 
         List<BookMarkApiDTO.BookMarkDTO> bookMarkDTOList = jpaQueryFactory
                 .select(new QBookMarkApiDTO_BookMarkDTO(
+                        bookMark.id,
                         bookMark.movieCd,
                         bookMark.movieNm,
                         bookMark.movieNmEn,

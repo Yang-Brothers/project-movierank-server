@@ -16,6 +16,7 @@ public class BookMarkApiDTO extends CommonResult {
     @Data
     @NoArgsConstructor
     public static class BookMarkDTO {
+        private Long bookMarkId;
         private String movieCd;
         private String movieNm;
         private String movieNmEn;
@@ -28,7 +29,8 @@ public class BookMarkApiDTO extends CommonResult {
         private String director;
 
         @QueryProjection
-        public BookMarkDTO(String movieCd, String movieNm, String movieNmEn, String prdtYear, String openDt, String typeNm, String prdtStatNm, String repNationNm, String repGenreNm, String director) {
+        public BookMarkDTO(Long bookMarkId, String movieCd, String movieNm, String movieNmEn, String prdtYear, String openDt, String typeNm, String prdtStatNm, String repNationNm, String repGenreNm, String director) {
+            this.bookMarkId = bookMarkId;
             this.movieCd = movieCd;
             this.movieNm = movieNm;
             this.movieNmEn = movieNmEn;

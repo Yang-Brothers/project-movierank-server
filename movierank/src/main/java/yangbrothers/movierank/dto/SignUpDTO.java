@@ -14,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class SignUpDTO {
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력해주세요.")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String passwordConfirm;
 
 

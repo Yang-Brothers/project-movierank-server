@@ -27,3 +27,4 @@ hs_err_pid*
 movierank/src/main/java/yangbrothers/movierank/init/Init.java
 redis
 movierank/src/test/**
+*.png
