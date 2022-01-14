@@ -2,12 +2,17 @@ package yangbrothers.movierank.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import yangbrothers.movierank.dto.MovieApiDTO;
 import yangbrothers.movierank.dto.PageRequestDTO;
-import yangbrothers.movierank.ex.MovieNmRequiredEx;
 import yangbrothers.movierank.service.MovieService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -26,10 +31,10 @@ public class MovieController {
             @ApiResponse(code = 200, message = "영화 조회 성공")
     })
     @ApiOperation(value = "영화 조회를 지원하는 메소드")
-    public MovieApiDTO movieList(@ModelAttribute PageRequestDTO pageRequestDTO) {
-        return movieService.movieList(pageRequestDTO);
-    }
+    public ResponseEntity<MovieApiDTO> movieList(@Valid @ModelAttribute PageRequestDTO pageRequestDTO) {
 
+        return movieService.list(pageRequestDTO);
+    }
 
 
     @GetMapping("/search")
@@ -44,11 +49,8 @@ public class MovieController {
             @ApiResponse(code = 404, message = "해당되는 제목의 영화 부재")
     })
     @ApiOperation(value = "영화 검색를 지원하는 메소드")
-    public MovieApiDTO movieSearch(@ModelAttribute PageRequestDTO pageRequestDTO) {
-        if (!StringUtils.hasText(pageRequestDTO.getMovieNm())) {
-            throw new MovieNmRequiredEx("영화 이름을 입력해 주세요.");
-        }
+    public ResponseEntity<MovieApiDTO> movieSearch(@Valid @ModelAttribute PageRequestDTO pageRequestDTO) {
 
-        return movieService.movieSearch(pageRequestDTO);
+        return movieService.search(pageRequestDTO);
     }
 }

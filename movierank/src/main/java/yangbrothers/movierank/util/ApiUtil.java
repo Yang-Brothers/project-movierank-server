@@ -2,6 +2,8 @@ package yangbrothers.movierank.util;
 
 import yangbrothers.movierank.dto.common.CommonResult;
 
+import java.util.HashMap;
+
 public class ApiUtil {
 
     public static final String SUCCESS = "SUCCESS";
@@ -23,10 +25,11 @@ public class ApiUtil {
         successResult.setCode(code);
     }
 
-    public static void makeFailResult(CommonResult errorResult, String msg, String code) {
+    public static void makeFailResult(CommonResult errorResult, String code, String msg, HashMap<String, String> validationMsg) {
+        errorResult.setValidationMsg(validationMsg);
         errorResult.setResult(FAIL);
-        errorResult.setMsg(msg);
         errorResult.setCode(code);
+        errorResult.setMsg(msg);
     }
 
     public static CommonResult getSuccessResult(String code) {
@@ -36,9 +39,9 @@ public class ApiUtil {
         return successResult;
     }
 
-    public static CommonResult getFailResult(String msg, String code) {
+    public static CommonResult getFailResult(HashMap<String, String> validationMsg, String code, String msg) {
         CommonResult errorResult = new CommonResult();
-        makeFailResult(errorResult, msg, code);
+        makeFailResult(errorResult, code, msg, validationMsg);
 
         return errorResult;
     }

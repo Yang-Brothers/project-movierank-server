@@ -8,7 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yangbrothers.movierank.ex.AuthenticationEx;
-import yangbrothers.movierank.ex.LoginEx;
+
+import java.util.InputMismatchException;
 
 @RequestMapping("/api/authentication/error")
 @Api(tags = {"인증 오류시 예외를 던지는 Controller"})
@@ -21,7 +22,7 @@ public class AuthErrorController {
     })
     @ApiOperation(value = "로그인 오류를 처리하는 메소드")
     public void errorLoginFail() {
-        throw new LoginEx("아이디 또는 비밀번호가 일치하지 않습니다.");
+        throw new InputMismatchException("아이디 또는 비밀번호가 일치하지 않습니다.");
     }
 
     @GetMapping("/unauthenticated")
