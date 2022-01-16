@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import yangbrothers.movierank.dto.SignUpResponseDTO;
+import yangbrothers.movierank.dto.response.SignUpResponseDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.ex.AuthenticationEx;
 import yangbrothers.movierank.ex.MovieNmNotFoundEx;

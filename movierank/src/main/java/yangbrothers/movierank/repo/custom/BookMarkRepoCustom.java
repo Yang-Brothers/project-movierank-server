@@ -1,7 +1,8 @@
 package yangbrothers.movierank.repo.custom;
 
-import yangbrothers.movierank.dto.BookMarkApiDTO;
-import yangbrothers.movierank.dto.PageRequestDTO;
+import yangbrothers.movierank.dto.request.PageRequestDTO;
+import yangbrothers.movierank.dto.response.BookMarkApiDTO;
+import yangbrothers.movierank.dto.request.MovieSearchDTO;
 
 import java.util.List;
 

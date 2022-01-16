@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import yangbrothers.movierank.dto.MovieApiDTO;
-import yangbrothers.movierank.dto.PageRequestDTO;
+import yangbrothers.movierank.dto.request.MovieSearchDTO;
+import yangbrothers.movierank.dto.request.PageRequestDTO;
+import yangbrothers.movierank.dto.response.MovieApiDTO;
 import yangbrothers.movierank.ex.MovieNmNotFoundEx;
 import yangbrothers.movierank.repo.MovieRepo;
 import yangbrothers.movierank.util.ApiUtil;
@@ -19,13 +19,13 @@ public class MovieService {
 
     private final MovieRepo movieRepo;
 
-    public ResponseEntity<MovieApiDTO> list(PageRequestDTO pageRequestDTO) {
+    public ResponseEntity<MovieApiDTO> searchMovieList(PageRequestDTO pageRequestDTO) {
 
         return new ResponseEntity<>(getMovieApiDTO(movieRepo.movieList(pageRequestDTO)), HttpStatus.OK);
     }
 
-    public ResponseEntity<MovieApiDTO> search(PageRequestDTO pageRequestDTO) {
-        List<MovieApiDTO.MovieDTO> movieList = movieRepo.movieSearch(pageRequestDTO);
+    public ResponseEntity<MovieApiDTO> searchMovieInfo(MovieSearchDTO movieSearchDTO) {
+        List<MovieApiDTO.MovieDTO> movieList = movieRepo.movieSearch(movieSearchDTO);
 
         if (movieList.isEmpty()) {
             throw new MovieNmNotFoundEx("해당되는 제목의 영화가 없습니다.");
@@ -40,4 +40,5 @@ public class MovieService {
         ApiUtil.makeSuccessResult(movieApiDTO, ApiUtil.SUCCESS_OK);
         return movieApiDTO;
     }
+
 }

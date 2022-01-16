@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MovieApiConfig {
-    @Value("${api.key}")
+
+    @Value("${kobis.key}")
     private String key;
 
     @Bean

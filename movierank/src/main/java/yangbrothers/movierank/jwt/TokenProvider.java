@@ -33,7 +33,7 @@ public class TokenProvider {
     private final Key key;
 
     @Autowired
-    public TokenProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds, StringRedisTemplate redisTemplate) {
+    public TokenProvider(@Value("${jwt.key}") String secret, @Value("${jwt.time}") long tokenValidityInSeconds, StringRedisTemplate redisTemplate) {
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
         this.redisTemplate = redisTemplate;
         byte[] keyBytes = Decoders.BASE64.decode(secret);

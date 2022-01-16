@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import yangbrothers.movierank.dto.SignUpDTO;
+import yangbrothers.movierank.dto.request.SignUpDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
         sequenceName = "USER_SEQ",
         allocationSize = 1
 )
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @Column(name = "user_id")
@@ -42,11 +42,5 @@ public class User {
         this.username = signUpDTO.getUsername();
         this.password = passwordEncoder.encode(signUpDTO.getPassword());
         this.role = Role.USER;
-    }
-
-    public User(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder, Role admin) {
-        this.username = signUpDTO.getUsername();
-        this.password = passwordEncoder.encode(signUpDTO.getPassword());
-        this.role = admin;
     }
 }

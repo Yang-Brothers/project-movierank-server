@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yangbrothers.movierank.dto.LoginDTO;
-import yangbrothers.movierank.dto.SignUpDTO;
-import yangbrothers.movierank.dto.SignUpResponseDTO;
-import yangbrothers.movierank.dto.TokenDTO;
+import yangbrothers.movierank.dto.request.LoginDTO;
+import yangbrothers.movierank.dto.request.SignUpDTO;
+import yangbrothers.movierank.dto.response.SignUpResponseDTO;
+import yangbrothers.movierank.dto.request.TokenDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.service.AuthService;
 

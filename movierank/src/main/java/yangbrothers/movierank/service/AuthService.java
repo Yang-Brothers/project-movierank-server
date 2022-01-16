@@ -6,19 +6,17 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import yangbrothers.movierank.dto.LoginDTO;
-import yangbrothers.movierank.dto.SignUpDTO;
-import yangbrothers.movierank.dto.SignUpResponseDTO;
-import yangbrothers.movierank.dto.TokenDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
+import yangbrothers.movierank.dto.request.LoginDTO;
+import yangbrothers.movierank.dto.request.SignUpDTO;
+import yangbrothers.movierank.dto.request.TokenDTO;
+import yangbrothers.movierank.dto.response.SignUpResponseDTO;
 import yangbrothers.movierank.entity.User;
 import yangbrothers.movierank.ex.SignUpEx;
 import yangbrothers.movierank.jwt.JwtFilter;
@@ -28,7 +26,6 @@ import yangbrothers.movierank.util.ApiUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.concurrent.TimeUnit;
 
 @Service

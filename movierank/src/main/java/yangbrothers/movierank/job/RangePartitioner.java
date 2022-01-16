@@ -12,23 +12,23 @@ public class RangePartitioner implements Partitioner {
     @Override
     public Map<String, ExecutionContext> partition(int gridSize) {
         HashMap<String, ExecutionContext> result = new HashMap<>();
-        long firstPage = 1;
-        long lastPage = 25;
-        int count = 0;
+        int firstPage = 0;
+        int count = 1;
 
-        while (lastPage <= 100) {
-            long firstIndex = (firstPage - 1) * 100;
-            long lastIndex = firstIndex + 2501;
+        while (firstPage < 20) {
+            int lastPage = firstPage + 4;
+            int firstIndex = firstPage * 500;
+            int lastIndex = firstIndex + 2499;
+
             ExecutionContext executionContext = new ExecutionContext();
             result.put("partition " + count++, executionContext);
 
-            executionContext.putLong("firstPage", firstPage);
-            executionContext.putLong("lastPage", lastPage);
-            executionContext.putLong("firstIndex", firstIndex);
-            executionContext.putLong("lastIndex", lastIndex);
+            executionContext.putInt("firstPage", firstPage);
+            executionContext.putInt("lastPage", lastPage);
+            executionContext.putInt("firstIndex", firstIndex);
+            executionContext.putInt("lastIndex", lastIndex);
 
-            firstPage += 25;
-            lastPage += 25;
+            firstPage += 5;
         }
 
         return result;

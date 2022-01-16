@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yangbrothers.movierank.dto.BookMarkApiDTO;
+import yangbrothers.movierank.dto.response.BookMarkApiDTO;
 
 import javax.persistence.*;
 
@@ -17,38 +17,38 @@ import javax.persistence.*;
         sequenceName = "BOOKMARK_SEQ",
         allocationSize = 1
 )
-public class BookMark {
+public class BookMark extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOOKMARK_SEQ_GENERATOR")
     @Column(name = "bookmark_id")
     private Long id;
 
-    private String movieCd;
-    private String movieNm;
-    private String movieNmEn;
-    private String prdtYear;
-    private String openDt;
-    private String typeNm;
-    private String prdtStatNm;
-    private String repNationNm;
-    private String repGenreNm;
-    private String director;
+    private String DOCID;
+    private String movieSeq;
+    private String title;
+    private String titleEng;
+    private String prodYear;
+    @Lob
+    private String directors;
+    @Lob
+    private String actors;
+    private String nation;
+    @Lob
+    private String plot;
+    private String runtime;
+    private String rating;
+    private String genre;
+    private String type;
+    private String repRlsDate;
+    @Lob
+    private String posters;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public BookMark(BookMarkApiDTO.BookMarkDTO bookMarkDTO, User user) {
-        this.movieCd = bookMarkDTO.getMovieCd();
-        this.movieNm = bookMarkDTO.getMovieNm();
-        this.movieNmEn = bookMarkDTO.getMovieNmEn();
-        this.prdtYear = bookMarkDTO.getPrdtYear();
-        this.openDt = bookMarkDTO.getOpenDt();
-        this.typeNm = bookMarkDTO.getTypeNm();
-        this.prdtStatNm = bookMarkDTO.getPrdtStatNm();
-        this.repNationNm = bookMarkDTO.getRepNationNm();
-        this.repGenreNm = bookMarkDTO.getRepGenreNm();
+    public void createUser(User user) {
         this.user = user;
         user.getBookMarkList().add(this);
     }

@@ -1,9 +1,11 @@
 spring:
   profiles:
-    active: dev
+    active: ${active.profile}
     group:
-      "local": "local, common"
-      "dev": "dev, common"
+      "local1": "local1, common"
+      "local2": "local2, common"
+      "dev1": "dev1, common"
+      "dev2": "dev2, common"
 ---
 spring:
   config:
@@ -38,10 +40,11 @@ logging.level:
 jwt:
   header: Authorization
   secret: ${jwt.key}
-  token-validity-in-seconds: 86400
+  token-validity-in-seconds: ${jwt.time}
 
 api:
-  secret: ${api.key}
+  kobis_secret: ${kobis.key}
+  kmdb_sercret: ${kmdb.key}
 
 quartz:
   config: ${quartz.time}
@@ -55,7 +58,7 @@ management:
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: local1
   h2:
     console:
       enabled: true
@@ -68,6 +71,27 @@ spring:
   batch:
     jdbc:
       initialize-schema: embedded
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: local2
+  h2:
+    console:
+      enabled: true
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1;DB_CLOSE_ON_EXIT=FALSE
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+  batch:
+    jdbc:
+      initialize-schema: embedded
+server:
+  port: 8082
 ---
 spring:
   jpa:
@@ -76,14 +100,37 @@ spring:
         dialect: org.hibernate.dialect.MariaDB103Dialect
   config:
     activate:
-      on-profile: dev
+      on-profile: dev1
   datasource:
     hikari:
-      jdbc-url: jdbc:mariadb://localhost:3306/movierank?characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
-      username: yhw
-      password: 1234
+
+      jdbc-url: jdbc:mariadb://springboot-apiservice-moiverank.cgez4rq58ubw.ap-northeast-2.rds.amazonaws.com
+      username: rere
+      password: ${db.password}
       driver-class-name: org.mariadb.jdbc.Driver
   batch:
     jdbc:
       initialize-schema: always
+server:
+  port: 8081
+---
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+  config:
+    activate:
+      on-profile: dev2
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mariadb://springboot-apiservice-moiverank.cgez4rq58ubw.ap-northeast-2.rds.amazonaws.com
+      username: rere
+      password: ${db.password}
+      driver-class-name: org.mariadb.jdbc.Driver
+  batch:
+    jdbc:
+      initialize-schema: always
+server:
+  port: 8082
 ---

@@ -3,7 +3,7 @@
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.stereotype.Component;
-//import yangbrothers.movierank.dto.SignUpDTO;
+//import yangbrothers.movierank.dto.request.SignUpDTO;
 //import yangbrothers.movierank.entity.Role;
 //import yangbrothers.movierank.entity.User;
 //import yangbrothers.movierank.repo.UserRepo;

@@ -41,9 +41,6 @@ public class JobConfig {
     private final EntityManager entityManager;
     private final MovieApiService movieApiService;
 
-    @Value("${api.secret}")
-    private String key;
-
     @Bean
     public Job job() {
         return jobBuilderFactory.get("job")
@@ -75,15 +72,15 @@ public class JobConfig {
     @Bean
     @StepScope
     public ItemReader<? extends Movie> itemReader(
-            @Value("#{stepExecutionContext['firstPage']}") long firstPage,
-            @Value("#{stepExecutionContext['lastPage']}") long lastPage,
-            @Value("#{stepExecutionContext['firstIndex']}") long firstIndex,
-            @Value("#{stepExecutionContext['lastIndex']}") long lastIndex) {
+            @Value("#{stepExecutionContext['firstPage']}") int firstPage,
+            @Value("#{stepExecutionContext['lastPage']}") int lastPage,
+            @Value("#{stepExecutionContext['firstIndex']}") int firstIndex,
+            @Value("#{stepExecutionContext['lastIndex']}") int lastIndex) {
         ArrayList<Movie> list = new ArrayList<>();
 
-        for (long i = firstPage; i <= lastPage; i++) {
+        for (int i = firstPage; i <= lastPage; i++) {
             long startTime = System.currentTimeMillis();
-            List<Movie> movies = movieApiService.movieList(String.valueOf(i), null, "100");
+            List<Movie> movies = movieApiService.searchMovieList(i * 500);
             long endTime = System.currentTimeMillis();
             log.info("Thread: {}, runningTime: {}", Thread.currentThread().getName(), endTime - startTime);
             list.addAll(movies);
@@ -95,8 +92,8 @@ public class JobConfig {
         return new ListItemReader<>(list);
     }
 
-    private void indexing(long firstIndex, ArrayList<Movie> list) {
-        long i = firstIndex + 1;
+    private void indexing(int firstIndex, ArrayList<Movie> list) {
+        int i = firstIndex + 1;
         for (Movie movie : list) {
             movie.setId(i++);
         }

@@ -1,13 +1,14 @@
 package yangbrothers.movierank.service;
 
 import lombok.RequiredArgsConstructor;
+import org.dozer.DozerBeanMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import yangbrothers.movierank.dto.BookMarkApiDTO;
-import yangbrothers.movierank.dto.PageRequestDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
+import yangbrothers.movierank.dto.request.PageRequestDTO;
+import yangbrothers.movierank.dto.response.BookMarkApiDTO;
 import yangbrothers.movierank.entity.BookMark;
 import yangbrothers.movierank.entity.User;
 import yangbrothers.movierank.repo.BookMarkRepo;
@@ -22,11 +23,15 @@ public class BookMarkService {
 
     private final UserRepo userRepo;
     private final BookMarkRepo bookMarkRepo;
+    private final DozerBeanMapper dozerBeanMapper;
 
     public ResponseEntity<CommonResult> register(String username, BookMarkApiDTO.BookMarkDTO bookMarkDTO) {
         User user = userRepo.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("해당 이름은 갖는 사용자가 없습니다."));
 
-        BookMark bookMark = new BookMark(bookMarkDTO, user);
+
+        BookMark bookMark = dozerBeanMapper.map(bookMarkDTO, BookMark.class);
+        bookMark.createUser(user);
+
         bookMarkRepo.save(bookMark);
         CommonResult commonResult = new CommonResult();
         ApiUtil.makeSuccessResult(commonResult, ApiUtil.SUCCESS_CREATED);

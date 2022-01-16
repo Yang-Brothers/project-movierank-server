@@ -1,7 +1,7 @@
 package yangbrothers.movierank.ex;
 
 import lombok.Getter;
-import yangbrothers.movierank.dto.SignUpDTO;
+import yangbrothers.movierank.dto.request.SignUpDTO;
 
 @Getter
 public class SignUpEx extends RuntimeException {

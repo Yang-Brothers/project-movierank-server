@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import yangbrothers.movierank.dto.BookMarkApiDTO;
-import yangbrothers.movierank.dto.PageRequestDTO;
 import yangbrothers.movierank.dto.common.CommonResult;
+import yangbrothers.movierank.dto.request.PageRequestDTO;
+import yangbrothers.movierank.dto.response.BookMarkApiDTO;
 import yangbrothers.movierank.service.BookMarkService;
 
 @RestController
@@ -29,7 +29,7 @@ public class BookMarkController {
             @ApiResponse(code = 400, message = "북마크 등록 실패")
     })
     @ApiOperation(value = "북마크 등록을 지원하는 메소드")
-    public ResponseEntity<CommonResult> bookMarkRegister(@PathVariable("username") String username, @RequestBody BookMarkApiDTO.BookMarkDTO bookMarkDTO) {
+    public ResponseEntity<CommonResult> register(@PathVariable("username") String username, @RequestBody BookMarkApiDTO.BookMarkDTO bookMarkDTO) {
 
         return bookMarkService.register(username, bookMarkDTO);
     }
@@ -45,7 +45,7 @@ public class BookMarkController {
             @ApiResponse(code = 200, message = "북마크 조회 실패")
     })
     @ApiOperation(value = "북마크 조회를 지원하는 메소드")
-    public ResponseEntity<BookMarkApiDTO> bookMarkList(@PathVariable("username") String username, @ModelAttribute PageRequestDTO pageRequestDTO) {
+    public ResponseEntity<BookMarkApiDTO> list(@PathVariable("username") String username, @ModelAttribute PageRequestDTO pageRequestDTO) {
 
         return bookMarkService.list(username, pageRequestDTO);
     }
@@ -59,7 +59,7 @@ public class BookMarkController {
             @ApiResponse(code = 200, message = "북마크 삭제 실패")
     })
     @ApiOperation(value = "북마크 삭제를 지원하는 메소드")
-    public ResponseEntity<CommonResult> bookMarkDelete(@PathVariable("bookMarkId") Long bookMarkId) {
+    public ResponseEntity<CommonResult> delete(@PathVariable("bookMarkId") Long bookMarkId) {
 
         return bookMarkService.delete(bookMarkId);
     }

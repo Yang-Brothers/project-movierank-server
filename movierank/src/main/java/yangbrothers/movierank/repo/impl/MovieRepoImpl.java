@@ -2,9 +2,10 @@ package yangbrothers.movierank.repo.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import yangbrothers.movierank.dto.MovieApiDTO;
-import yangbrothers.movierank.dto.PageRequestDTO;
-import yangbrothers.movierank.dto.QMovieApiDTO_MovieDTO;
+import yangbrothers.movierank.dto.request.MovieSearchDTO;
+import yangbrothers.movierank.dto.request.PageRequestDTO;
+import yangbrothers.movierank.dto.response.MovieApiDTO;
+import yangbrothers.movierank.dto.response.QMovieApiDTO_MovieDTO;
 import yangbrothers.movierank.repo.custom.MovieRepoCustom;
 
 import java.util.List;
@@ -19,18 +20,21 @@ public class MovieRepoImpl implements MovieRepoCustom {
     public List<MovieApiDTO.MovieDTO> movieList(PageRequestDTO pageRequestDTO) {
         List<MovieApiDTO.MovieDTO> movieList = jpaQueryFactory
                 .select(new QMovieApiDTO_MovieDTO(
-                        movie.movieCd,
-                        movie.movieNm,
-                        movie.movieNmEn,
-                        movie.prdtYear,
-                        movie.openDt,
-                        movie.typeNm,
-                        movie.prdtStatNm,
-                        movie.nationAlt,
-                        movie.genreAlt,
-                        movie.repNationNm,
-                        movie.repGenreNm,
-                        movie.directors
+                        movie.DOCID,
+                        movie.movieSeq,
+                        movie.title,
+                        movie.titleEng,
+                        movie.prodYear,
+                        movie.directors,
+                        movie.actors,
+                        movie.nation,
+                        movie.plot,
+                        movie.runtime,
+                        movie.rating,
+                        movie.genre,
+                        movie.type,
+                        movie.repRlsDate,
+                        movie.posters
                 ))
                 .from(movie)
                 .offset(pageRequestDTO.getStart())
@@ -41,26 +45,29 @@ public class MovieRepoImpl implements MovieRepoCustom {
     }
 
     @Override
-    public List<MovieApiDTO.MovieDTO> movieSearch(PageRequestDTO pageRequestDTO) {
+    public List<MovieApiDTO.MovieDTO> movieSearch(MovieSearchDTO movieSearchDTO) {
         List<MovieApiDTO.MovieDTO> movieList = jpaQueryFactory
                 .select(new QMovieApiDTO_MovieDTO(
-                        movie.movieCd,
-                        movie.movieNm,
-                        movie.movieNmEn,
-                        movie.prdtYear,
-                        movie.openDt,
-                        movie.typeNm,
-                        movie.prdtStatNm,
-                        movie.nationAlt,
-                        movie.genreAlt,
-                        movie.repNationNm,
-                        movie.repGenreNm,
-                        movie.directors
+                        movie.DOCID,
+                        movie.movieSeq,
+                        movie.title,
+                        movie.titleEng,
+                        movie.prodYear,
+                        movie.directors,
+                        movie.actors,
+                        movie.nation,
+                        movie.plot,
+                        movie.runtime,
+                        movie.rating,
+                        movie.genre,
+                        movie.type,
+                        movie.repRlsDate,
+                        movie.posters
                 ))
                 .from(movie)
-                .where(movie.movieNm.contains(pageRequestDTO.getMovieNm()))
-                .offset(pageRequestDTO.getStart())
-                .limit(pageRequestDTO.getLen())
+                .where(movie.title.contains(movieSearchDTO.getMovieNm()))
+                .offset(movieSearchDTO.getStart())
+                .limit(movieSearchDTO.getLen())
                 .fetch();
 
         return movieList;

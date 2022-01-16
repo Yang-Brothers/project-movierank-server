@@ -1,4 +1,4 @@
-package yangbrothers.movierank.dto;
+package yangbrothers.movierank.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,14 +22,4 @@ public class SignUpDTO {
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
     private String passwordConfirm;
-
-
-    public List<String> getFields() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("username");
-        list.add("password");
-        list.add("passwordConfirm");
-
-        return list;
-    }
 }
