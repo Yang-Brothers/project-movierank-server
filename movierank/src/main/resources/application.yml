@@ -103,9 +103,8 @@ spring:
       on-profile: dev1
   datasource:
     hikari:
-
-      jdbc-url: jdbc:mariadb://springboot-apiservice-moiverank.cgez4rq58ubw.ap-northeast-2.rds.amazonaws.com
-      username: rere
+      jdbc-url: ${jdbc.url}
+      username: ${db.name}
       password: ${db.password}
       driver-class-name: org.mariadb.jdbc.Driver
   batch:
@@ -124,8 +123,8 @@ spring:
       on-profile: dev2
   datasource:
     hikari:
-      jdbc-url: jdbc:mariadb://springboot-apiservice-moiverank.cgez4rq58ubw.ap-northeast-2.rds.amazonaws.com
-      username: rere
+      jdbc-url: ${jdbc.url}
+      username: ${db.name}
       password: ${db.password}
       driver-class-name: org.mariadb.jdbc.Driver
   batch:
