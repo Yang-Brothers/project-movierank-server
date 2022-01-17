@@ -25,3 +25,7 @@ movierank/src/main/java/yangbrothers/movierank/init/Init.java
 redis
 movierank/src/test/**
 *.png
+*/db/mysql
+*/db
+movierank/.env
+jenkins
