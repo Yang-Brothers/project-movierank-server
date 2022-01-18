@@ -29,3 +29,11 @@ movierank/src/test/**
 */db
 movierank/.env
 jenkins
+.gradle
+.idea
+build
+db
+*/src/test
+out
+src/test
+.env
