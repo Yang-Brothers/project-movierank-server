@@ -60,8 +60,8 @@ public class MovieController {
 
     @GetMapping("/searchDailyBoxOfficeList")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "localDateTime", required = true, dataType = "LocalDateTime", paramType = "query"),
-            @ApiImplicitParam(name = "len", required = true, dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "len", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "date", required = true, dataType = "date", paramType = "query")
     })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "영화 검색 성공"),

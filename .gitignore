@@ -37,3 +37,4 @@ db
 out
 src/test
 .env
+prometheus
