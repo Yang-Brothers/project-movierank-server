@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         web.ignoring().mvcMatchers("/swagger-resources/**", "/swagger-ui/**", "/v2/api-docs", "webjars/**",
-                "/actuator/**", "/favicon.ico");
+                "/actuator/**", "/favicon.ico", "/h2-console/**");
     }
 
     @Override

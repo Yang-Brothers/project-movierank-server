@@ -18,7 +18,7 @@ public class DailyBoxOfficeSearchDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-    @ApiModelProperty(value = "크기", allowableValues = "1, 10")
+    @ApiModelProperty(value = "크기: [1, 10]")
     @Max(value = 10, message = "한번에 10개 이상을 조회할 수 없습니다.")
     private Integer len = 10;
 }

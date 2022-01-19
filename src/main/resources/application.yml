@@ -37,6 +37,10 @@ logging.level:
 #  org.hibernate.type: trace
   io.swagger.models.parameters.AbstractSerializableParameter: error
 
+logging:
+  file:
+    path: /var/log/app1/
+
 jwt:
   header: Authorization
   secret: ${jwt.key}
