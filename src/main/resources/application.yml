@@ -17,7 +17,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -27,19 +27,19 @@ spring:
         jdbc.batch_size: 1000
         default_batch_fetch_size: 1000
 #        show_sql: true
-#        format_sql: true
+        format_sql: true
   batch:
     job:
       enabled: false
-
-logging.level:
-#  org.hibernate.SQL: debug
-#  org.hibernate.type: trace
-  io.swagger.models.parameters.AbstractSerializableParameter: error
+      firstPage: ${batch.job.firstPage}
 
 logging:
   file:
     path: /var/log/app1/
+  level:
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
+    io.swagger.models.parameters.AbstractSerializableParameter: error
 
 jwt:
   header: Authorization
@@ -113,7 +113,7 @@ spring:
       driver-class-name: org.mariadb.jdbc.Driver
   batch:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
 server:
   port: 8081
 ---
@@ -133,7 +133,7 @@ spring:
       driver-class-name: org.mariadb.jdbc.Driver
   batch:
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
 server:
   port: 8082
 ---

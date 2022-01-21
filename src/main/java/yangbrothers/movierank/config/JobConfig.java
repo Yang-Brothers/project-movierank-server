@@ -100,8 +100,8 @@ public class JobConfig {
     }
 
     private void deleteQuery(long firstIndex, long lastIndex) {
-        Query query = entityManager.createQuery("DELETE FROM Movie m where m.id > :firstIndex and m.id < :lastIndex");
-        int deleteCount = query.setParameter("firstIndex", firstIndex).setParameter("lastIndex", lastIndex).executeUpdate();
+        Query query = entityManager.createQuery("DELETE FROM Movie m where m.id > :firstIndex and m.id <= :lastIndex");
+        int deleteCount = query.setParameter("firstIndex", firstIndex).setParameter("lastIndex", lastIndex + 1).executeUpdate();
         log.info("deleteCount: {}", deleteCount);
     }
 

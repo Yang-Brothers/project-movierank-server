@@ -39,6 +39,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     public User(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder) {
+
         this.username = signUpDTO.getUsername();
         this.password = passwordEncoder.encode(signUpDTO.getPassword());
         this.role = Role.USER;

@@ -39,3 +39,4 @@ src/test
 .env
 prometheus
 docker-compose.yml
+*.sh

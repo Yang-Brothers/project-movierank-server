@@ -4,7 +4,7 @@ import org.quartz.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import yangbrothers.movierank.Quartz.BatchScheduledJob;
+import yangbrothers.movierank.quartz.BatchScheduledJob;
 
 @Configuration
 public class QuartzConfig {

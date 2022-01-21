@@ -1,4 +1,4 @@
-package yangbrothers.movierank.Quartz;
+package yangbrothers.movierank.quartz;
 
 import lombok.RequiredArgsConstructor;
 import org.quartz.JobExecutionContext;
@@ -15,6 +15,9 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Component
 @RequiredArgsConstructor
 public class BatchScheduledJob extends QuartzJobBean {
@@ -25,7 +28,8 @@ public class BatchScheduledJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        JobParameters jobParameters = new JobParametersBuilder(jobExplorer).getNextJobParameters(job).toJobParameters();
+        JobParameters jobParameters = new JobParametersBuilder(jobExplorer).getNextJobParameters(job)
+                .addDate("date", new Date()).toJobParameters();
 
         try {
             this.jobLauncher.run(job, jobParameters);

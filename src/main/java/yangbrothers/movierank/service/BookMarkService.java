@@ -28,7 +28,6 @@ public class BookMarkService {
     public ResponseEntity<CommonResult> register(String username, BookMarkApiDTO.BookMarkDTO bookMarkDTO) {
         User user = userRepo.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("해당 이름은 갖는 사용자가 없습니다."));
 
-
         BookMark bookMark = dozerBeanMapper.map(bookMarkDTO, BookMark.class);
         bookMark.createUser(user);
 
