@@ -42,7 +42,7 @@ public class BookMarkController {
     })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "북마크 조회 성공"),
-            @ApiResponse(code = 200, message = "북마크 조회 실패")
+            @ApiResponse(code = 400, message = "북마크 조회 실패")
     })
     @ApiOperation(value = "북마크 조회를 지원하는 메소드")
     public ResponseEntity<BookMarkApiDTO> list(@PathVariable("username") String username, @ModelAttribute PageRequestDTO pageRequestDTO) {
@@ -56,7 +56,7 @@ public class BookMarkController {
     })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "북마크 삭제 성공"),
-            @ApiResponse(code = 200, message = "북마크 삭제 실패")
+            @ApiResponse(code = 400, message = "북마크 삭제 실패")
     })
     @ApiOperation(value = "북마크 삭제를 지원하는 메소드")
     public ResponseEntity<CommonResult> delete(@PathVariable("bookMarkId") Long bookMarkId) {

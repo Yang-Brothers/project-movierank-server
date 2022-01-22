@@ -14,6 +14,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.dto.request.DailyBoxOfficeSearchDTO;
 import yangbrothers.movierank.dto.response.DailyBoxOfficeApiDTO;
 import yangbrothers.movierank.entity.Movie;
@@ -116,7 +117,7 @@ public class MovieApiService {
         return result;
     }
 
-    public ResponseEntity<DailyBoxOfficeApiDTO> searchDailyBoxOfficeList(DailyBoxOfficeSearchDTO dailyBoxOfficeSearchDTO) {
+    public ResponseEntity<CommonResult> searchDailyBoxOfficeList(DailyBoxOfficeSearchDTO dailyBoxOfficeSearchDTO) {
         LocalDate localDateTime = dailyBoxOfficeSearchDTO.getDate();
         String date = String.format("%04d%02d%02d", localDateTime.getYear(), localDateTime.getMonthValue(), localDateTime.getDayOfMonth());
         try {
@@ -140,7 +141,8 @@ public class MovieApiService {
             return new ResponseEntity<>(dailyBoxOfficeApiDTO, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            CommonResult failResult = ApiUtil.getFailResult(null, ApiUtil.FAIL_BAD_REQUEST, "일별 박스오피스 조회에 실패 했습니다.");
+            return new ResponseEntity<>(failResult, HttpStatus.BAD_REQUEST);
         }
     }
 }

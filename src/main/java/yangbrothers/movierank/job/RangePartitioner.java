@@ -16,6 +16,7 @@ public class RangePartitioner implements Partitioner {
 
     @Override
     public Map<String, ExecutionContext> partition(int gridSize) {
+        int firstPage = this.firstPage;
         HashMap<String, ExecutionContext> result = new HashMap<>();
         int count = 1;
 

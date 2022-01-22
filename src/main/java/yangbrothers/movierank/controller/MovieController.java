@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.dto.request.DailyBoxOfficeSearchDTO;
-import yangbrothers.movierank.dto.request.PageRequestDTO;
-import yangbrothers.movierank.dto.response.DailyBoxOfficeApiDTO;
-import yangbrothers.movierank.dto.response.MovieApiDTO;
 import yangbrothers.movierank.dto.request.MovieSearchDTO;
+import yangbrothers.movierank.dto.request.PageRequestDTO;
+import yangbrothers.movierank.dto.response.MovieApiDTO;
 import yangbrothers.movierank.service.MovieApiService;
 import yangbrothers.movierank.service.MovieService;
 
@@ -64,11 +64,11 @@ public class MovieController {
             @ApiImplicitParam(name = "date", required = true, dataType = "date", paramType = "query")
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "영화 검색 성공"),
-            @ApiResponse(code = 400, message = "영화 검색 실패")
+            @ApiResponse(code = 200, message = "일별 박스오피스 검색 성공"),
+            @ApiResponse(code = 400, message = "일별 박스오피스 검색 실패")
     })
     @ApiOperation(value = "일별 박스오피스 검색를 지원하는 메소드")
-    public ResponseEntity<DailyBoxOfficeApiDTO> searchDailyBoxOfficeList(@Valid @ModelAttribute DailyBoxOfficeSearchDTO dailyBoxOfficeSearchDTO) {
+    public ResponseEntity<CommonResult> searchDailyBoxOfficeList(@Valid @ModelAttribute DailyBoxOfficeSearchDTO dailyBoxOfficeSearchDTO) {
         return movieApiService.searchDailyBoxOfficeList(dailyBoxOfficeSearchDTO);
     }
 }

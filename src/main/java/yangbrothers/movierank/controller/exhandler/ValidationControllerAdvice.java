@@ -26,25 +26,8 @@ public class ValidationControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult methodArgumentNotValidExHandle(MethodArgumentNotValidException ex) {
-        HashMap<String, String> validationMsg = new HashMap<>();
-
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-
-        for (FieldError error : fieldErrors) {
-            String message = Arrays.stream(Objects.requireNonNull(error.getCodes()))
-                    .map(c -> {
-                        Object[] arguments = error.getArguments();
-                        try {
-                            return messageSource.getMessage(c, arguments, null);
-                        } catch (NoSuchMessageException e) {
-                            return null;
-                        }
-                    }).filter(Objects::nonNull)
-                    .findFirst()
-                    .orElse(error.getDefaultMessage());
-
-            validationMsg.put(error.getField(), message);
-        }
+        HashMap validationMsg = getValidationMsg(fieldErrors);
 
         return ApiUtil.getFailResult(validationMsg, ApiUtil.FAIL_BAD_REQUEST, null);
     }
@@ -52,25 +35,8 @@ public class ValidationControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult bindExHandle(BindException ex) {
-        HashMap<String, String> validationMsg = new HashMap<>();
-
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-
-        for (FieldError error : fieldErrors) {
-            String message = Arrays.stream(Objects.requireNonNull(error.getCodes()))
-                    .map(c -> {
-                        Object[] arguments = error.getArguments();
-                        try {
-                            return messageSource.getMessage(c, arguments, null);
-                        } catch (NoSuchMessageException e) {
-                            return null;
-                        }
-                    }).filter(Objects::nonNull)
-                    .findFirst()
-                    .orElse(error.getDefaultMessage());
-
-            validationMsg.put(error.getField(), message);
-        }
+        HashMap validationMsg = getValidationMsg(fieldErrors);
 
         return ApiUtil.getFailResult(validationMsg, ApiUtil.FAIL_BAD_REQUEST, null);
     }
@@ -91,5 +57,27 @@ public class ValidationControllerAdvice {
         }
 
         return ApiUtil.getFailResult(validationMsg, ApiUtil.FAIL_BAD_REQUEST, null);
+    }
+
+    public HashMap getValidationMsg(List<FieldError> fieldErrors) {
+        HashMap<String, String> validationMsg = new HashMap<>();
+
+        for (FieldError error : fieldErrors) {
+            String message = Arrays.stream(Objects.requireNonNull(error.getCodes()))
+                    .map(c -> {
+                        Object[] arguments = error.getArguments();
+                        try {
+                            return messageSource.getMessage(c, arguments, null);
+                        } catch (NoSuchMessageException e) {
+                            return null;
+                        }
+                    }).filter(Objects::nonNull)
+                    .findFirst()
+                    .orElse(error.getDefaultMessage());
+
+            validationMsg.put(error.getField(), message);
+        }
+
+        return validationMsg;
     }
 }
