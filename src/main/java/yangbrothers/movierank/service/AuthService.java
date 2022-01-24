@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.dto.request.LoginDTO;
 import yangbrothers.movierank.dto.request.SignUpDTO;
-import yangbrothers.movierank.dto.request.TokenDTO;
+import yangbrothers.movierank.dto.response.TokenDTO;
 import yangbrothers.movierank.dto.response.SignUpResponseDTO;
 import yangbrothers.movierank.entity.User;
 import yangbrothers.movierank.ex.SignUpEx;
@@ -63,9 +63,9 @@ public class AuthService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         TokenDTO tokenDTO = new TokenDTO(loginDTO.getUsername(), jwt);
-        ApiUtil.makeSuccessResult(tokenDTO, ApiUtil.SUCCESS_CREATED);
+        ApiUtil.makeSuccessResult(tokenDTO, ApiUtil.SUCCESS_OK);
 
-        return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.OK);
     }
 
     public ResponseEntity<CommonResult> logout(HttpServletRequest request) {

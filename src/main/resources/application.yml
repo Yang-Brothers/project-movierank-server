@@ -53,6 +53,11 @@ api:
 quartz:
   config: ${quartz.time}
 
+springfox:
+  documentation:
+    swagger:
+        use-model-v3: false
+
 management:
   endpoints:
     web:

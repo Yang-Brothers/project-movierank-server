@@ -1,4 +1,4 @@
-package yangbrothers.movierank.dto.request;
+package yangbrothers.movierank.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
