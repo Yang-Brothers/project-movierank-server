@@ -2,6 +2,7 @@ package yangbrothers.movierank.controller.exhandler;
 
 import com.mchange.util.AlreadyExistsException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -60,5 +61,12 @@ public class ExControllerAdvice {
     public CommonResult movieNmNotFoundExHandle(MovieNmNotFoundEx ex) {
 
         return ApiUtil.getFailResult(null, ApiUtil.FAIL_NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CommonResult badCredentialsExHandle(BadCredentialsException ex) {
+
+        return ApiUtil.getFailResult(null, ApiUtil.FAIL_BAD_REQUEST, ex.getMessage());
     }
 }

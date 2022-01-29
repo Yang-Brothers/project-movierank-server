@@ -2,10 +2,12 @@ package yangbrothers.movierank.service;
 
 import com.mchange.util.AlreadyExistsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -15,8 +17,8 @@ import org.springframework.stereotype.Service;
 import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.dto.request.LoginDTO;
 import yangbrothers.movierank.dto.request.SignUpDTO;
-import yangbrothers.movierank.dto.response.TokenDTO;
 import yangbrothers.movierank.dto.response.SignUpResponseDTO;
+import yangbrothers.movierank.dto.response.TokenDTO;
 import yangbrothers.movierank.entity.User;
 import yangbrothers.movierank.ex.SignUpEx;
 import yangbrothers.movierank.jwt.JwtFilter;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -56,8 +59,15 @@ public class AuthService {
     }
 
     public ResponseEntity<TokenDTO> login(LoginDTO loginDTO) {
+        Authentication authentication = null;
 
-        Authentication authentication = getAuthentication(loginDTO);
+        try {
+            authentication = getAuthentication(loginDTO);
+        } catch (BadCredentialsException ex) {
+            log.info("[AuthService][login][BadCredentialsException]username: {}", loginDTO.getUsername());
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
+
         String jwt = tokenProvider.createToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
