@@ -20,7 +20,7 @@ public class BookMarkController {
 
     private final BookMarkService bookMarkService;
 
-    @PostMapping("/register/{username}")
+    @PostMapping("/{username}")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "username", required = true, dataType = "String", paramType = "path"),
             @ApiImplicitParam(name = "bookMarkDTO", required = true, dataTypeClass = BookMarkApiDTO.BookMarkDTO.class, paramType = "body")
@@ -53,7 +53,7 @@ public class BookMarkController {
         return bookMarkService.list(username, pageRequestDTO);
     }
 
-    @DeleteMapping("/delete/{bookMarkId}")
+    @DeleteMapping("/{bookMarkId}")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "bookMarkId", required = true, dataType = "Long", paramType = "query"),
     })
