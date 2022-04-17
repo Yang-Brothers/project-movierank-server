@@ -23,7 +23,6 @@ hs_err_pid*
 .DS_Store
 movierank/src/main/java/yangbrothers/movierank/init/Init.java
 redis
-movierank/src/test/**
 *.png
 */db/mysql
 */db
@@ -33,10 +32,9 @@ jenkins
 .idea
 build
 db
-*/src/test
 out
-src/test
 .env
 prometheus
 docker-compose.yml
 *.sh
+src/test/resources/application.yml
