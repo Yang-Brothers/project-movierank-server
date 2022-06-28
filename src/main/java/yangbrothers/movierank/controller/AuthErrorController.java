@@ -11,7 +11,7 @@ import yangbrothers.movierank.ex.AuthenticationEx;
 
 import java.util.InputMismatchException;
 
-@RequestMapping("/api/authentication/error")
+@RequestMapping("/api/v1/authentication/error")
 @Api(tags = {"인증 오류시 예외를 던지는 Controller"})
 @Controller
 public class AuthErrorController {

@@ -1,5 +1,6 @@
 package yangbrothers.movierank.controller;
 
+import com.mchange.util.AlreadyExistsException;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/authentication")
+@RequestMapping("/api/v1/authentication")
 @RequiredArgsConstructor
 @Api(tags = {"회원가입, 로그인, 인증 오류를 제공하는 Controller"})
 public class AuthController {
@@ -31,7 +32,7 @@ public class AuthController {
     })
     @ApiOperation(value = "회원가입을 진행하는 메소드")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<SignUpResponseDTO> signup(@Valid @RequestBody SignUpDTO signUpDTO) throws Exception {
+    public ResponseEntity<SignUpResponseDTO> signup(@Valid @RequestBody SignUpDTO signUpDTO) throws AlreadyExistsException {
 
         return authService.signUp(signUpDTO);
     }
@@ -43,8 +44,7 @@ public class AuthController {
             @ApiResponse(code = 400, message = "로그인 실패", response = CommonResult.class)
     })
     @ApiOperation(value = "로그인을 진행하는 메소드")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) throws Exception {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
 
         return authService.login(loginDTO);
     }
@@ -52,7 +52,6 @@ public class AuthController {
     @PostMapping("/logout")
     @ApiResponse(code = 200, message = "로그아웃 성공", response = CommonResult.class)
     @ApiOperation(value = "로그아웃을 진행하는 메소드")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CommonResult> logout(HttpServletRequest request) {
 
         return authService.logout(request);
