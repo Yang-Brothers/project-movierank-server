@@ -27,10 +27,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class BookMarkServiceTest {
+class BookMarkServiceImplTest {
 
     @Mock
     UserRepo userRepo;
@@ -42,14 +41,14 @@ class BookMarkServiceTest {
     DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
     @InjectMocks
-    BookMarkService bookMarkService;
+    BookMarkServiceImpl bookMarkServiceImpl;
 
 
     @Test
     @DisplayName("registerFailTest")
     public void registerFailTest() throws Exception {
         given(userRepo.findUserByUsername(any(String.class))).willThrow(UsernameNotFoundException.class);
-        assertThatThrownBy(() -> bookMarkService.register("test", any())).isInstanceOf(UsernameNotFoundException.class);
+        assertThatThrownBy(() -> bookMarkServiceImpl.register("test", any())).isInstanceOf(UsernameNotFoundException.class);
     }
 
     @Test
@@ -59,7 +58,7 @@ class BookMarkServiceTest {
         given(userRepo.findUserByUsername(anyString())).willReturn(Optional.ofNullable(user));
         given(bookMarkRepo.save(any(BookMark.class))).willReturn(any(BookMark.class));
 
-        ResponseEntity<CommonResult> response = bookMarkService.register("test", new BookMarkApiDTO.BookMarkDTO("test", "test",
+        ResponseEntity<CommonResult> response = bookMarkServiceImpl.register("test", new BookMarkApiDTO.BookMarkDTO("test", "test",
                 "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test", "test"));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

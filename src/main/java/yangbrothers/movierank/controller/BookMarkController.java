@@ -9,10 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.dto.request.PageRequestDTO;
 import yangbrothers.movierank.dto.response.BookMarkApiDTO;
+import yangbrothers.movierank.dto.response.BookMarkApiDTO.BookMarkDTO;
 import yangbrothers.movierank.service.BookMarkService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @RestController
-@RequestMapping("/api/bookmark")
+@RequestMapping("/api/v1/bookmark")
 @RequiredArgsConstructor
 @Api(tags = {"북마크 기능을 제공하는 Controller"})
 @Validated
@@ -23,7 +28,7 @@ public class BookMarkController {
     @PostMapping("/{username}")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "username", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "bookMarkDTO", required = true, dataTypeClass = BookMarkApiDTO.BookMarkDTO.class, paramType = "body")
+            @ApiImplicitParam(name = "bookMarkDTO", required = true, dataTypeClass = BookMarkDTO.class, paramType = "body")
     })
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "북마크 등록 성공", response = CommonResult.class),
@@ -31,14 +36,14 @@ public class BookMarkController {
     })
     @ApiOperation(value = "북마크 등록을 지원하는 메소드")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CommonResult> register(@PathVariable("username") String username, @RequestBody BookMarkApiDTO.BookMarkDTO bookMarkDTO) {
+    public ResponseEntity<CommonResult> register(@PathVariable String username, @RequestBody BookMarkDTO bookMarkDTO) {
 
         return bookMarkService.register(username, bookMarkDTO);
     }
 
-    @GetMapping("/list/{username}")
+    @GetMapping("/list")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "username", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "username", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "start", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "len", required = true, dataType = "int", paramType = "query")
     })
@@ -47,23 +52,21 @@ public class BookMarkController {
             @ApiResponse(code = 400, message = "북마크 조회 실패", response = CommonResult.class)
     })
     @ApiOperation(value = "북마크 조회를 지원하는 메소드")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BookMarkApiDTO> list(@PathVariable("username") String username, @ModelAttribute PageRequestDTO pageRequestDTO) {
+    public ResponseEntity<BookMarkApiDTO> list(@RequestParam @NotBlank String username, @ModelAttribute PageRequestDTO pageRequestDTO) {
 
         return bookMarkService.list(username, pageRequestDTO);
     }
 
-    @DeleteMapping("/{bookMarkId}")
+    @DeleteMapping
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "bookMarkId", required = true, dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "bookmarkid", required = true, dataType = "Long", paramType = "query"),
     })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "북마크 삭제 성공", response = CommonResult.class),
             @ApiResponse(code = 400, message = "북마크 삭제 실패", response = CommonResult.class)
     })
     @ApiOperation(value = "북마크 삭제를 지원하는 메소드")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<CommonResult> delete(@PathVariable("bookMarkId") Long bookMarkId) {
+    public ResponseEntity<CommonResult> delete(@RequestParam("bookmarkid") @NotNull Long bookMarkId) {
 
         return bookMarkService.delete(bookMarkId);
     }
