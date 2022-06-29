@@ -4,7 +4,11 @@ import yangbrothers.movierank.dto.common.CommonResult;
 
 import java.util.HashMap;
 
-public class ApiUtil {
+public final class ApiUtil {
+
+    private ApiUtil() {
+        throw new AssertionError("객체를 생성할 수 없는 클래스입니다.");
+    }
 
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";
@@ -17,7 +21,6 @@ public class ApiUtil {
     public static final String FAIL_BAD_REQUEST = "400";
     public static final String FAIL_UNAUTHORIZED = "401";
     public static final String FAIL_NOT_FOUND = "404";
-
 
 
     public static void makeSuccessResult(CommonResult successResult, String code) {
