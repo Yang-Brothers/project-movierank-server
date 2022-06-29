@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -21,3 +20,21 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.DS_Store
+movierank/src/main/java/yangbrothers/movierank/init/Init.java
+redis
+*.png
+*/db/mysql
+*/db
+movierank/.env
+jenkins
+.gradle
+.idea
+build
+db
+out
+.env
+prometheus
+docker-compose.yml
+*.sh
+src/test/resources/application.yml
