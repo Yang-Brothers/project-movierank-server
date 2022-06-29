@@ -2,6 +2,7 @@ package yangbrothers.movierank.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ import java.util.List;
         sequenceName = "USER_SEQ",
         allocationSize = 1
 )
+@Builder
 public class User extends BaseTimeEntity {
 
     @Id
@@ -39,7 +41,6 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     public User(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder) {
-
         this.username = signUpDTO.getUsername();
         this.password = passwordEncoder.encode(signUpDTO.getPassword());
         this.role = Role.USER;

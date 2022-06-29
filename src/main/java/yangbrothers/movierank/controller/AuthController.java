@@ -32,7 +32,7 @@ public class AuthController {
     })
     @ApiOperation(value = "회원가입을 진행하는 메소드")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<SignUpResponseDTO> signup(@Valid @RequestBody SignUpDTO signUpDTO) throws AlreadyExistsException {
+    public ResponseEntity<SignUpResponseDTO> signUp(@Valid @RequestBody SignUpDTO signUpDTO) throws AlreadyExistsException {
 
         return authService.signUp(signUpDTO);
     }
