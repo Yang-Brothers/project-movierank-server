@@ -17,31 +17,35 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @SequenceGenerator(
-        name = "USER_SEQ_GENERATOR",
-        sequenceName = "USER_SEQ",
+        name = "MEMBER_SEQ_GENERATOR",
+        sequenceName = "MEMBER_SEQ",
         allocationSize = 1
 )
 @Builder
-public class User extends BaseTimeEntity {
+public class Member extends BaseTimeEntity {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ_GENERATOR")
-    private Long userId;
+    private Long memberId;
 
     @Column(unique = true)
     private String username;
 
+    @Column(unique = true)
+    private String nickName;
+
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     List<BookMark> bookMarkList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder) {
+    public Member(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder) {
         this.username = signUpDTO.getUsername();
+        this.nickName = signUpDTO.getNickName();
         this.password = passwordEncoder.encode(signUpDTO.getPassword());
         this.role = Role.USER;
     }

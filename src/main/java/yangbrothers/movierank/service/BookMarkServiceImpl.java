@@ -10,7 +10,7 @@ import yangbrothers.movierank.dto.common.CommonResult;
 import yangbrothers.movierank.dto.request.PageRequestDTO;
 import yangbrothers.movierank.dto.response.BookMarkApiDTO;
 import yangbrothers.movierank.entity.BookMark;
-import yangbrothers.movierank.entity.User;
+import yangbrothers.movierank.entity.Member;
 import yangbrothers.movierank.repo.BookMarkRepo;
 import yangbrothers.movierank.repo.UserRepo;
 import yangbrothers.movierank.util.ApiUtil;
@@ -27,10 +27,10 @@ public class BookMarkServiceImpl implements BookMarkService {
 
     @Override
     public ResponseEntity<CommonResult> register(String username, BookMarkApiDTO.BookMarkDTO bookMarkDTO) {
-        User user = userRepo.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("해당 이름은 갖는 사용자가 없습니다."));
+        Member member = userRepo.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("해당 이름은 갖는 사용자가 없습니다."));
 
         BookMark bookMark = dozerBeanMapper.map(bookMarkDTO, BookMark.class);
-        bookMark.createUser(user);
+        bookMark.createMember(member);
 
         bookMarkRepo.save(bookMark);
         CommonResult commonResult = new CommonResult();
@@ -41,9 +41,9 @@ public class BookMarkServiceImpl implements BookMarkService {
 
     @Override
     public ResponseEntity<BookMarkApiDTO> list(String username, PageRequestDTO pageRequestDTO) {
-        User user = userRepo.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("해당 이름은 갖는 사용자가 없습니다."));
+        Member member = userRepo.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("해당 이름은 갖는 사용자가 없습니다."));
 
-        List<BookMarkApiDTO.BookMarkDTO> bookMarkList = bookMarkRepo.bookMarkList(user.getUserId(), pageRequestDTO);
+        List<BookMarkApiDTO.BookMarkDTO> bookMarkList = bookMarkRepo.bookMarkList(member.getMemberId(), pageRequestDTO);
         BookMarkApiDTO bookMarkApiDTO = new BookMarkApiDTO();
         bookMarkApiDTO.getData().put("bookMarkList", bookMarkList);
         ApiUtil.makeSuccessResult(bookMarkApiDTO, ApiUtil.SUCCESS_OK);

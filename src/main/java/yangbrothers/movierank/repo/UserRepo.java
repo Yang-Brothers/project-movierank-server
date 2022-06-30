@@ -1,11 +1,13 @@
 package yangbrothers.movierank.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import yangbrothers.movierank.entity.User;
+import yangbrothers.movierank.entity.Member;
 
 import java.util.Optional;
 
-public interface UserRepo extends JpaRepository<User, Long> {
+public interface UserRepo extends JpaRepository<Member, Long> {
 
-    Optional<User> findUserByUsername(String username);
+    Optional<Member> findUserByUsername(String username);
+
+    Optional<Member> findUserByNickName(String nickName);
 }

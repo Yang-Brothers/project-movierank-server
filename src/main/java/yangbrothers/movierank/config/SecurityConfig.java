@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -32,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private final String[] whiteList = new String[]{"/api/v1/authentication/login", "/api/v1/authentication/error/loginfail",
-            "/api/v1/authentication/error/unauthenticated", "/api/v1/authentication/signup", "/test", "/h2-console/**", "/api/v1/movie/**"};
+            "/api/v1/authentication/error/unauthenticated", "/api/v1/authentication/signup", "/test", "/h2-console/**", "/api/v1/movie/**", "/error"};
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -74,7 +75,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(new DaoAuthenticationProvider());
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return new ProviderManager(daoAuthenticationProvider);
     }
 }

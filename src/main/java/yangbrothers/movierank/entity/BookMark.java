@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yangbrothers.movierank.dto.response.BookMarkApiDTO;
 
 import javax.persistence.*;
 
@@ -45,11 +44,11 @@ public class BookMark extends BaseTimeEntity {
     private String posters;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    public void createUser(User user) {
-        this.user = user;
-        user.getBookMarkList().add(this);
+    public void createMember(Member member) {
+        this.member = member;
+        member.getBookMarkList().add(this);
     }
 }
