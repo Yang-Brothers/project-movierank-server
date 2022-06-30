@@ -20,7 +20,7 @@ import yangbrothers.movierank.dto.request.LoginDTO;
 import yangbrothers.movierank.dto.request.SignUpDTO;
 import yangbrothers.movierank.dto.response.SignUpResponseDTO;
 import yangbrothers.movierank.dto.response.TokenDTO;
-import yangbrothers.movierank.entity.User;
+import yangbrothers.movierank.entity.Member;
 import yangbrothers.movierank.ex.SignUpEx;
 import yangbrothers.movierank.jwt.JwtFilter;
 import yangbrothers.movierank.jwt.TokenProvider;
@@ -45,16 +45,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public ResponseEntity<SignUpResponseDTO> signUp(SignUpDTO signUpDTO) throws AlreadyExistsException {
-        if (userRepo.findUserByUsername(signUpDTO.getUsername()).orElse(null) != null) {
+        if (userRepo.findUserByNickName(signUpDTO.getNickName()).orElse(null) != null) {
             throw new AlreadyExistsException("이미 존재하는 아이디입니다.");
         }
         if (!signUpDTO.getPassword().equals(signUpDTO.getPasswordConfirm())) {
             throw new SignUpEx("비밀번호가 일치하지 않습니다.", signUpDTO);
         }
 
-        userRepo.save(new User(signUpDTO, passwordEncoder));
+        userRepo.save(new Member(signUpDTO, passwordEncoder));
 
-        SignUpResponseDTO signUpResponseDTO = new SignUpResponseDTO(signUpDTO.getUsername());
+        SignUpResponseDTO signUpResponseDTO = new SignUpResponseDTO(signUpDTO.getUsername(), signUpDTO.getNickName());
         ApiUtil.makeSuccessResult(signUpResponseDTO, ApiUtil.SUCCESS_CREATED);
 
         return new ResponseEntity<>(signUpResponseDTO, HttpStatus.CREATED);
@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             authentication = getAuthentication(loginDTO);
         } catch (BadCredentialsException ex) {
-            log.info("[AuthService][login][BadCredentialsException]username: {}", loginDTO.getUsername());
+            log.info("[AuthService][login][BadCredentialsException]username: {}", loginDTO.getNickName());
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        TokenDTO tokenDTO = new TokenDTO(loginDTO.getUsername(), jwt);
+        TokenDTO tokenDTO = new TokenDTO(loginDTO.getNickName(), "Bearer " + jwt);
         ApiUtil.makeSuccessResult(tokenDTO, ApiUtil.SUCCESS_OK);
 
         return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.OK);
@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Authentication getAuthentication(LoginDTO loginDTO) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.getNickName(), loginDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

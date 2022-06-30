@@ -18,6 +18,10 @@ public class SignUpDTO {
     @Pattern(regexp = "[가-힣][가-힣]+", message = "이름 형식을 지켜주세요.")
     private String username;
 
+    @NotBlank
+    @Pattern(regexp = "[^\\s]+", message = "닉네임 형식을 지켜주세요.")
+    private String nickName;
+
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Pattern(regexp = "(?=.*[A-Z]).{8,15}", message = "비밀번호 형식을 지켜주세요.")
     private String password;

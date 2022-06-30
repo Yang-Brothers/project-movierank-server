@@ -43,7 +43,7 @@ public class ExControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult signUpExHandle(SignUpEx ex) {
-        SignUpResponseDTO signUpResponseDTO = new SignUpResponseDTO(ex.getSignUpDTO().getUsername());
+        SignUpResponseDTO signUpResponseDTO = new SignUpResponseDTO(ex.getSignUpDTO().getUsername(), ex.getSignUpDTO().getNickName());
         ApiUtil.makeFailResult(signUpResponseDTO, ApiUtil.FAIL_BAD_REQUEST, ex.getMessage(), null);
 
         return signUpResponseDTO;

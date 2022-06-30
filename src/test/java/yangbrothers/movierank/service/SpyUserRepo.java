@@ -4,7 +4,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import yangbrothers.movierank.entity.User;
+import yangbrothers.movierank.entity.Member;
 import yangbrothers.movierank.repo.UserRepo;
 
 import java.util.List;
@@ -12,32 +12,38 @@ import java.util.Optional;
 
 public class SpyUserRepo implements UserRepo {
 
-    public Optional<User> findUserByUsername_returnValue;
-    public User save_argument;
-    public User save_returnValue;
+    public Optional<Member> findUserByUsername_returnValue;
+    public Optional<Member> findUserByNickname_returnValue;
+    public Member save_argument;
+    public Member save_returnValue;
 
     @Override
-    public Optional<User> findUserByUsername(String username) {
+    public Optional<Member> findUserByUsername(String username) {
         return findUserByUsername_returnValue;
     }
 
     @Override
-    public List<User> findAll() {
+    public Optional<Member> findUserByNickName(String nickName) {
+        return findUserByNickname_returnValue;
+    }
+
+    @Override
+    public List<Member> findAll() {
         return null;
     }
 
     @Override
-    public List<User> findAll(Sort sort) {
+    public List<Member> findAll(Sort sort) {
         return null;
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
+    public Page<Member> findAll(Pageable pageable) {
         return null;
     }
 
     @Override
-    public List<User> findAllById(Iterable<Long> longs) {
+    public List<Member> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -52,7 +58,7 @@ public class SpyUserRepo implements UserRepo {
     }
 
     @Override
-    public void delete(User entity) {
+    public void delete(Member entity) {
 
     }
 
@@ -62,7 +68,7 @@ public class SpyUserRepo implements UserRepo {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends User> entities) {
+    public void deleteAll(Iterable<? extends Member> entities) {
 
     }
 
@@ -72,18 +78,18 @@ public class SpyUserRepo implements UserRepo {
     }
 
     @Override
-    public <S extends User> S save(S entity) {
+    public <S extends Member> S save(S entity) {
         this.save_argument = entity;
         return (S) save_returnValue;
     }
 
     @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Member> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public Optional<User> findById(Long aLong) {
+    public Optional<Member> findById(Long aLong) {
         return Optional.empty();
     }
 
@@ -98,17 +104,17 @@ public class SpyUserRepo implements UserRepo {
     }
 
     @Override
-    public <S extends User> S saveAndFlush(S entity) {
+    public <S extends Member> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Member> List<S> saveAllAndFlush(Iterable<S> entities) {
         return null;
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<User> entities) {
+    public void deleteAllInBatch(Iterable<Member> entities) {
 
     }
 
@@ -123,42 +129,42 @@ public class SpyUserRepo implements UserRepo {
     }
 
     @Override
-    public User getOne(Long aLong) {
+    public Member getOne(Long aLong) {
         return null;
     }
 
     @Override
-    public User getById(Long aLong) {
+    public Member getById(Long aLong) {
         return null;
     }
 
     @Override
-    public <S extends User> Optional<S> findOne(Example<S> example) {
+    public <S extends Member> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends User> List<S> findAll(Example<S> example) {
+    public <S extends Member> List<S> findAll(Example<S> example) {
         return null;
     }
 
     @Override
-    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Member> List<S> findAll(Example<S> example, Sort sort) {
         return null;
     }
 
     @Override
-    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Member> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends User> long count(Example<S> example) {
+    public <S extends Member> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends User> boolean exists(Example<S> example) {
+    public <S extends Member> boolean exists(Example<S> example) {
         return false;
     }
 }

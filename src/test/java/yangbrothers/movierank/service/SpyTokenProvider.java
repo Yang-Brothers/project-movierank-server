@@ -7,9 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public class SpyTokenProvider implements TokenProvider {
+
+    public String createToken_returnValue;
+    public Authentication createToken_argument;
+
     @Override
     public String createToken(Authentication authentication) {
-        return null;
+        this.createToken_argument = authentication;
+        return createToken_returnValue;
     }
 
     @Override
